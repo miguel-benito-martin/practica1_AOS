@@ -1,0 +1,99 @@
+openapi: "3.0.3"
+info:
+  title: "Subsistema 3: gestión de trabajos de un taller"
+  version: "1.0.0"
+  description: "Asignatura AOS: grupo 1"
+  license:
+    name: AOSGrupo1
+    url: 'https://github.com/miguel-benito-martin/practica1_AOS'
+  contact:
+    name: Arquitecturas Orientadas a Servicios
+    url: 'https://moodle.upm.es/titulaciones/oficiales/mod/assign/view.php?id=1320916'
+    email: alberto.romartin@alumnos.upm.es
+#servers:
+#  - url: '{schema}://{server}:{port}/{basePath}'
+#    description: Servidor local
+#    variables:
+#      schema:
+#        description: Esquema
+#        default: http
+#       enum:
+#         - http
+#         - https
+#     server:
+#       description: Nombre del servidor
+#       default: 127.0.0.1
+#     port:
+#       description: Número de puerto
+#       default: '8080'
+#     basePath:
+#       description: Ruta base
+#       default: api/v1
+tags:
+  - name: 'Trabajos'
+    description: Trabajos de los usuarios
+paths:
+  /trabajo:
+    get:
+    post:
+    options:
+  /trabajo/{trabajoId}:
+    parameters:
+      - $ref: '#/components/parameters/trabajoId'
+    get:
+      tags:
+        - 'Trabajos'
+      summary: Buscar un trabajo por su ID
+      description: Devuelve el trabajo especificado por `trabajoId`
+      operationId: grupo_1_AOS_getId
+      responses:
+        '200':
+          description: Comanda
+          headers:
+            ETag:
+              $ref: '#/components/headers/ETag'  #lo hacen ruth y paz
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Trabajo'
+        '404':
+          $ref: '#/components/responses/Response_404'
+
+
+components:
+  schemas:
+    Trabajo:
+      - $ref: './schemas/trabajo.yaml#/Trabajo'
+      - $ref: './schemas/HTTP_Problems.yaml#/HTTP_Problem'
+  headers:
+  parameters:
+    trabajoId:
+      name: trabajoId
+      in: path
+      description: ID del trabajo
+      required: true
+      schema:
+        type: integer
+        pattern: ^\d+$
+  responses:
+    Response_404:
+      description: '`NOT FOUND`: recurso no disponible'
+      content:
+        application/problem+json:
+          schema:
+            $ref: '#/components/schemas/HTTP_Problem'
+          examples:
+            response-http-404:
+              $ref: '#/components/examples/response-http-404'
+    # podemos meter 414 Request-URI Too Long
+  examples:
+    trabajos:
+    response-http-404:
+      value:
+        type: https://httpstatuses.com/404
+        title: NOT FOUND
+        status: 404
+        detail: El recurso solicitado no está disponible...
+        instance: about:blank
+
+
