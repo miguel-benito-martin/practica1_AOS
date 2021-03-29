@@ -119,8 +119,10 @@ paths:
 components:
   schemas:
     Trabajo:
-      - $ref: './schemas/trabajo.yaml#/Trabajo'
-      - $ref: './schemas/HTTP_Problems.yaml#/HTTP_Problem'
+      $ref: './schemas/trabajo.yaml#/Trabajo'
+    HTTP_Problem:
+      $ref: './schemas/HTTP_Problem.yaml#/HTTP_Problem'
+
   headers:
     ETag:
       description: Entity Tag (identificador único proporcionado para validación de caché)
