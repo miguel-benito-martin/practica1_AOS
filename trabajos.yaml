@@ -1,4 +1,14 @@
 openapi: "3.0.3"
 info:
+  title: "Subsistema 3: gestión de trabajos de un taller"
+  version: "1.0.0"
+  description: "Asignatura AOS: grupo 1"
+  license:
+    name: AOSGrupo1
+    url: 'https://github.com/miguel-benito-martin/practica1_AOS'
+  contact:
+    name: Arquitecturas Orientadas a Servicios
+    url: 'https://moodle.upm.es/titulaciones/oficiales/mod/assign/view.php?id=1320916'
+    email: alberto.romartin@alumnos.upm.es
 paths:
 
