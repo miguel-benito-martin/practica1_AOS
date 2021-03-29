@@ -35,8 +35,64 @@ tags:
 paths:
   /trabajo:
     get:
+      tags:
+        - 'Trabajo'
+      summary: Obtiene todos los trabajos de mantenimiento que se realizan sobre un vehículo
+      operationId: upm_aos_trabajo_cget
+      responses:
+        200:
+          description: Array de trabajos
+          headers:
+            ETag:
+              $ref: '#/components/headers/ETag'
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  trabajos:
+                    description: array de trabajos
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/Trabajo'
+ #             examples:
+ #               trabajosExamples:
+ #                 $ref: '#/components/examples/trabajos'
+        404:
+          $ref: '#/components/responses/Response_404'
     post:
+      tags:
+        - 'Trabajo'
+      summary: Crea un nuevo trabajo
+      description: Genera un nuevo trabajo de mantenimiento para un determinado vehículo
+      operationId: upm_aos_trabajo_post
+ #   requestBody:
+ #     $ref: '#/components/requestBodies/trabajoRB'
+      responses:
+        201:
+          description: Trabajo creado
+          headers:
+            Location:
+              $ref: '#/components/headers/Location'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Trabajo'
+        422:
+          $ref: '#/components/responses/Response_422'
     options:
+      tags:
+        - 'Trabajo'
+      summary: Proporciona la lista de los métodos HTTP soportados.
+      description: Devuelve una cabecera `Allow` con la lista de métodos HTTP soportados (separados por comas).
+      operationId: upm_aos_trabajo_coptions
+      responses:
+        '204':
+          description: 'cabecera `Allow` &lt;El cuerpo de la respuesta está vacío&gt;'
+          headers:
+            Allow:
+              $ref: '#/components/headers/Allow'
+
   /trabajo/{trabajoId}:
     parameters:
       - $ref: '#/components/parameters/trabajoId'
@@ -66,6 +122,27 @@ components:
       - $ref: './schemas/trabajo.yaml#/Trabajo'
       - $ref: './schemas/HTTP_Problems.yaml#/HTTP_Problem'
   headers:
+    ETag:
+      description: Entity Tag (identificador único proporcionado para validación de caché)
+      schema:
+        type: string
+        pattern: "[0-9a-f]*"
+        # https://github.com/marak/Faker.js#api-methods
+        x-faker: random.uuid
+        example:
+          32b64ff851405fdd
+    Location:
+      description: '`URI` del nuevo recurso'
+      schema:
+        type: string
+        format: url
+        x-faker: internet.url
+    Allow:
+      description: Lista de métodos HTTP soportados
+      schema:
+        type: string
+      example:
+        GET,DELETE,PUT,OPTIONS
   parameters:
     trabajoId:
       name: trabajoId
@@ -88,6 +165,7 @@ components:
     # podemos meter 414 Request-URI Too Long
   examples:
     trabajos:
+
     response-http-404:
       value:
         type: https://httpstatuses.com/404
