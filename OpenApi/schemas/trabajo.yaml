@@ -1,6 +1,6 @@
 Trabajo:
   type: object
-  description: Añadir descripción FFFFFFFFFFFF
+  description: Añadir descripción 
   properties:
     trabajoId:
       description: Identicador del trabajo
