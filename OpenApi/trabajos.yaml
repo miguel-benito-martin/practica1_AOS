@@ -66,8 +66,8 @@ paths:
       summary: Crea un nuevo trabajo
       description: Genera un nuevo trabajo de mantenimiento para un determinado vehículo
       operationId: upm_aos_trabajo_post
- #   requestBody:
- #     $ref: '#/components/requestBodies/trabajoRB'
+      requestBody:
+       $ref: '#/components/requestBodies/trabajoRB'
       responses:
         201:
           description: Trabajo creado
@@ -154,6 +154,34 @@ components:
       schema:
         type: integer
         pattern: ^\d+$
+  requestBodies:
+    trabajoRB:
+      description: '`Trabajo` data'
+      required: true
+      content:
+        application/json:
+          schema:
+            type: object
+            required:
+              - nombre
+              - descripcion
+              - estadoTrabajo
+            properties:
+              nombre:
+                description: Nombre del tipo de trabajo
+                type: string
+              descripcion:
+                description: Descripción del trabajo
+                type: string
+              estadoTrabajo:
+                description: Posibles estados del trabajo [Creado, Planificado, Iniciado , Terminado]
+                type: string
+                enum: [ Creado, Planificado, Iniciado , Terminado ]
+            example:
+              nombre: Reparación de frenos
+              descripcion: Reparación del freno derecho
+              estadoTrabajo: Creado
+
   responses:
     Response_404:
       description: '`NOT FOUND`: recurso no disponible'

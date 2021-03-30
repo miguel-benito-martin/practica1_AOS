@@ -1,0 +1,37 @@
+Trabajo:
+  type: object
+  description: Añadir descripción FFFFFFFFFFFF
+  properties:
+    trabajoId:
+      description: Identicador del trabajo
+      readOnly: true
+      type: integer
+      format: int32
+    idVehiculo:
+      description: ID del vehículo sobre el que se reliza el trabajo
+      readOnly: true
+      type: integer
+      format: int32
+    idCliente:
+      description: ID del cliente propietario del vehículo
+      readOnly: true
+      type: integer
+      format: int32
+    nombre:
+      description: Nombre del tipo de trabajo
+      type: string
+    descripcion:
+      description: Descripción del trabajo
+      type: string
+    estadoTrabajo:
+      description: Posibles estados del trabajo [Creado, Planificado, Iniciado , Terminado]
+      type: string
+      enum: [Creado, Planificado, Iniciado , Terminado]
+    fechaInicio:
+      description: Fecha en la que se inicializa el trabajo
+      type: string
+      format: date-time
+    fechaFin:
+      description: Fecha en la que se finaliza el trabajo
+      type: string
+      format: date-time
