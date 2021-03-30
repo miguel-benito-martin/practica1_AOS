@@ -174,9 +174,9 @@ components:
                 description: Descripción del trabajo
                 type: string
               estadoTrabajo:
-                description: Posibles estados del trabajo [Creado, Planificado, Iniciado , Terminado]
+                description: Posibles estados del trabajo [Creado, Planificado, Iniciado, Terminado]
                 type: string
-                enum: [ Creado, Planificado, Iniciado , Terminado ]
+                enum: [ Creado, Planificado, Iniciado, Terminado ]
             example:
               nombre: Reparación de frenos
               descripcion: Reparación del freno derecho
