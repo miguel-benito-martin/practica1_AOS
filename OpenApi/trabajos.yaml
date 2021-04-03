@@ -101,7 +101,7 @@ paths:
         - "Trabajo"
       summary: "Buscar trabajo por estado"
       description: "Buscar trabajos por su estado actual"
-      operationId: "findTrabajoByEstado"
+      operationId: findTrabajoByEstado
       parameters:
         - $ref: '#/components/parameters/estadoTrabajo'
       responses:
