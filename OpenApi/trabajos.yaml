@@ -30,7 +30,7 @@ info:
 #       description: Ruta base
 #       default: api/v1
 tags:
-  - name: 'Trabajos'
+  - name: 'Trabajo'
     description: Trabajos de los usuarios
 paths:
   /trabajo:
@@ -98,7 +98,7 @@ paths:
       - $ref: '#/components/parameters/trabajoId'
     get:
       tags:
-        - 'Trabajos'
+        - 'Trabajo'
       summary: Buscar un trabajo por su ID
       description: Devuelve el trabajo especificado por `trabajoId`
       operationId: grupo_1_AOS_getId
