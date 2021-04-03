@@ -10,25 +10,27 @@ info:
     name: Arquitecturas Orientadas a Servicios
     url: 'https://moodle.upm.es/titulaciones/oficiales/mod/assign/view.php?id=1320916'
     email: alberto.romartin@alumnos.upm.es
-#servers:
-#  - url: '{schema}://{server}:{port}/{basePath}'
-#    description: Servidor local
-#    variables:
-#      schema:
-#        description: Esquema
-#        default: http
-#       enum:
-#         - http
-#         - https
-#     server:
-#       description: Nombre del servidor
-#       default: 127.0.0.1
-#     port:
-#       description: Número de puerto
-#       default: '8080'
-#     basePath:
-#       description: Ruta base
-#       default: api/v1
+servers:
+  - url: '{schema}://{server}:{port}/{basePath}'
+    description: Servidor local
+    variables:
+      schema:
+        description: Esquema
+        default: http
+        enum:
+          - http
+          - https
+      server:
+        description: Nombre del servidor
+        default: 127.0.0.1
+      port:
+        description: Número de puerto
+        default: '8080'
+      basePath:
+        description: Ruta base
+        default: api/v1
+  - url: './schemas/trabajo.yaml#/Trabajo'
+  - url: './schemas/HTTP_Problems.yaml#/HTTP_Problem'
 tags:
   - name: 'Trabajo'
     description: Trabajos de los usuarios
