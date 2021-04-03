@@ -1,0 +1,28 @@
+version: "3"
+services:
+    proxy:
+        image: caddy
+        container_name: trabajos_proxy
+        volumes:
+            - ./Caddyfile:/etc/caddy/Caddyfile
+        ports:
+            - 80:80
+        depends_on:
+            - backend
+    backend:
+        image: stoplight/prism:4
+        container_name: trabajos_mock
+        command: mock --cors -h 0.0.0.0 "/practica1_AOS/trabajos.yaml"
+        ports:
+          - 4010:4010
+        volumes:
+            - ./openapi:/practica1_AOS:ro
+    frontend:
+        image: swaggerapi/swagger-ui
+        container_name: trabajos_ui
+        ports:
+            - 8000:8080
+        environment:
+            SWAGGER_JSON: /practica1_AOS/trabajos.yaml
+        volumes:
+            - ./OpenApi:/practica1_AOS:ro
