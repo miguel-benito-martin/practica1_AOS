@@ -183,8 +183,8 @@ components:
   schemas:
     Trabajo:
       $ref: './schemas/trabajo.yaml#/Trabajo'
-    HTTP_Problem:
-      $ref: './schemas/HTTP_Problem.yaml#/HTTP_Problem'
+    HTTP_Problems:
+      $ref: './schemas/HTTP_Problems.yaml#/HTTP_Problem'
 
   headers:
     ETag:
@@ -275,7 +275,7 @@ components:
       content:
         application/problem+json:
           schema:
-            $ref: '#/components/schemas/HTTP_Problem'
+            $ref: '#/components/schemas/HTTP_Problems'
           examples:
             response-http-404:
               $ref: '#/components/examples/response-http-404'
@@ -284,7 +284,7 @@ components:
       content:
         application/problem+jason:
           schema:
-            $ref: '#/components/schemas/HTTP_Problem'
+            $ref: '#/components/schemas/HTTP_Problems'
           examples:
             response-http-412:
               $ref: '#/components/examples/response-http-412'
@@ -293,7 +293,7 @@ components:
       content:
         application/problem+jason:
           schema:
-            $ref: '#/components/schemas/HTTP_Problem'
+            $ref: '#/components/schemas/HTTP_Problems'
           examples:
             response-http-412:
               $ref: '#/components/examples/response-http-413'
@@ -302,7 +302,7 @@ components:
       content:
         application/problem+json:
           schema:
-            $ref: '#/components/schemas/HTTP_Problem'
+            $ref: '#/components/schemas/HTTP_Problems'
           examples:
             response-http-422:
               $ref: '#/components/examples/response-http-422'
