@@ -38,7 +38,7 @@ paths:
       tags:
         - 'Trabajo'
       summary: Obtiene todos los trabajos de mantenimiento que se realizan sobre un vehículo
-      operationId: upm_aos_trabajo_cget
+      operationId: grupo_1_AOS_get
       responses:
         200:
           description: Array de trabajos
@@ -65,7 +65,7 @@ paths:
         - 'Trabajo'
       summary: Crea un nuevo trabajo
       description: Genera un nuevo trabajo de mantenimiento para un determinado vehículo
-      operationId: upm_aos_trabajo_post
+      operationId: grupo_1_AOS_post
       requestBody:
        $ref: '#/components/requestBodies/trabajoRB'
       responses:
@@ -78,20 +78,50 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/Trabajo'
+        '413':
+          $ref: '#/components/responses/Response_413'
         422:
           $ref: '#/components/responses/Response_422'
     options:
       tags:
         - 'Trabajo'
-      summary: Proporciona la lista de los métodos HTTP soportados.
+      summary: Proporciona la lista de los métodos HTTP soportados
       description: Devuelve una cabecera `Allow` con la lista de métodos HTTP soportados (separados por comas).
-      operationId: upm_aos_trabajo_coptions
+      operationId: grupo_1_AOS_options
       responses:
         '204':
           description: 'cabecera `Allow` &lt;El cuerpo de la respuesta está vacío&gt;'
           headers:
             Allow:
               $ref: '#/components/headers/Allow'
+
+  /trabajo/findByEstadoTrabajo:
+    get:
+      tags:
+        - "Trabajo"
+      summary: "Buscar trabajo por estado"
+      description: "Buscar trabajos por su estado actual"
+      operationId: "findTrabajoByEstado"
+      parameters:
+        - $ref: '#/components/parameters/estadoTrabajo'
+      responses:
+        200:
+          description: Array de trabajos
+          headers:
+            ETag:
+              $ref: '#/components/headers/ETag'
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  trabajos:
+                    description: array de trabajos
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/Trabajo'
+        "400":
+          description: "Invalid status value"
 
   /trabajo/{trabajoId}:
     parameters:
@@ -114,7 +144,40 @@ paths:
                 $ref: '#/components/schemas/Trabajo'
         '404':
           $ref: '#/components/responses/Response_404'
-
+    delete:
+      tags:
+        - 'Trabajo'
+      summary: Elimina un trabajo
+      description: Elimina un trabajo identificada por `trabajoId`.
+      operationId: grupo_1_AOS_delete
+      responses:
+        '204':
+          description: Trabajo eliminado &lt;Cuerpo de la respuesta vacío&gt;
+        '404':
+          $ref: '#/components/responses/Response_404'
+    put:
+      tags:
+        - 'Trabajo'
+      summary: Modifica un trabajo
+      description: Actualiza los datos de un trabajo
+      operationId: grupo_1_AOS_put
+      parameters:
+        - $ref: '#/components/parameters/ifMatchParam'
+      requestBody:
+        $ref: '#/components/requestBodies/trabajoRB'
+      responses:
+        '200':
+          description: 'Todo OK: trabajo modificado'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Trabajo'
+        '404':
+          $ref: '#/components/responses/Response_404'
+        '412':
+          $ref: '#/components/responses/Response_412'
+        '413':
+          $ref: '#/components/responses/Response_413'
 
 components:
   schemas:
@@ -145,6 +208,7 @@ components:
         type: string
       example:
         GET,DELETE,PUT,OPTIONS
+
   parameters:
     trabajoId:
       name: trabajoId
@@ -154,6 +218,29 @@ components:
       schema:
         type: integer
         pattern: ^\d+$
+    ifMatchParam:
+      name: If-Match
+      in: header
+      description: ETag del recurso que se desea modificar
+      required: true
+      schema:
+        type: string
+        pattern: "[0-9a-f]*"
+    estadoTrabajo:
+      name: estadoTrabajo
+      in: query
+      description: Elegir tipo de trabajo para su búsqueda
+      required: true
+      schema:
+        type: string
+        enum:
+          - "Creado"
+          - "Planificado"
+          - "Iniciado"
+          - "Terminado"
+        default: "Creado"
+
+
   requestBodies:
     trabajoRB:
       description: '`Trabajo` data'
@@ -184,7 +271,7 @@ components:
 
   responses:
     Response_404:
-      description: '`NOT FOUND`: recurso no disponible'
+      description: 'NOT FOUND: recurso no disponible'
       content:
         application/problem+json:
           schema:
@@ -192,7 +279,34 @@ components:
           examples:
             response-http-404:
               $ref: '#/components/examples/response-http-404'
-    # podemos meter 414 Request-URI Too Long
+    Response_412:
+      description: 'PRECONDITION FAILED: no se cumple alguna condición previa'
+      content:
+        application/problem+jason:
+          schema:
+            $ref: '#/components/schemas/HTTP_Problem'
+          examples:
+            response-http-412:
+              $ref: '#/components/examples/response-http-412'
+    Response_413:
+      description: 'PAYLOAD TOO LARGE: el dato es demasiado grande'
+      content:
+        application/problem+jason:
+          schema:
+            $ref: '#/components/schemas/HTTP_Problem'
+          examples:
+            response-http-412:
+              $ref: '#/components/examples/response-http-413'
+    Response_422:
+      description: 'UNPROCESSABLE ENTITY: falta algún dato'
+      content:
+        application/problem+json:
+          schema:
+            $ref: '#/components/schemas/HTTP_Problem'
+          examples:
+            response-http-422:
+              $ref: '#/components/examples/response-http-422'
+
   examples:
     trabajos:
 
@@ -203,5 +317,24 @@ components:
         status: 404
         detail: El recurso solicitado no está disponible...
         instance: about:blank
-
-
+    response-http-412:
+      value:
+        type: https://httpstatuses.com/412
+        title: PRECONDITION FAILED
+        status: 412
+        detail: Ha fallado alguna precondición
+        instance: about:blank
+    response-http-413:
+      value:
+        type: https://httpstatuses.com/413
+        title: PAYLOAD TOO LARGE
+        status: 413
+        detail: Tamaño del dato demasiado grande
+        instance: about:blank
+    response-http-422:
+      value:
+        type: https://httpstatuses.com/422
+        title: UNPROCESSABLE ENTITY
+        status: 422
+        detail: Fallo semántico
+        instance: about:blank

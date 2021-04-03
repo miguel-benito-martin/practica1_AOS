@@ -26,7 +26,11 @@ Trabajo:
     estadoTrabajo:
       description: Posibles estados del trabajo [Creado, Planificado, Iniciado, Terminado]
       type: string
-      enum: [Creado, Planificado, Iniciado, Terminado]
+      enum:
+      - "Creado"
+      - "Planificado"
+      - "Iniciado"
+      - "Terminado"    #linea 674
     fechaInicio:
       description: Fecha en la que se inicializa el trabajo
       type: string
