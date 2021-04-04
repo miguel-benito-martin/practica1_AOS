@@ -57,9 +57,9 @@ paths:
                     type: array
                     items:
                       $ref: '#/components/schemas/Trabajo'
- #             examples:
- #               trabajosExamples:
- #                 $ref: '#/components/examples/trabajos'
+              examples:
+                trabajosExamples:
+                  $ref: '#/components/examples/trabajos'
         404:
           $ref: '#/components/responses/Response_404'
     post:
@@ -69,7 +69,21 @@ paths:
       description: Genera un nuevo trabajo de mantenimiento para un determinado vehículo
       operationId: grupo_1_AOS_post
       requestBody:
-       $ref: '#/components/requestBodies/trabajoRB'
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - nombre
+                - descripcion
+              properties:
+                nombre:
+                  description: Nombre del tipo de trabajo
+                  type: string
+                descripcion:
+                  description: Descripción del trabajo
+                  type: string
       responses:
         201:
           description: Trabajo creado
@@ -311,7 +325,15 @@ components:
 
   examples:
     trabajos:
-
+      value:
+        - trabajoId: 1234
+          idVehiculo: 98765
+          idCliente: 14
+          nombre: Cambio de aceite
+          descripcion: Cambio de aceite cada 5000km
+          estadoTrabajo: Iniciado
+          fechaInicio: '2021-01-30T08:30:00Z'
+          fechaFin: null
     response-http-404:
       value:
         type: https://httpstatuses.com/404
