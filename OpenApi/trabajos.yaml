@@ -25,12 +25,10 @@ servers:
         default: 127.0.0.1
       port:
         description: Número de puerto
-        default: '8080'
+        default: '80'
       basePath:
         description: Ruta base
         default: api/v1
-  - url: './schemas/trabajo.yaml#/Trabajo'
-  - url: './schemas/HTTP_Problems.yaml#/HTTP_Problem'
 tags:
   - name: 'Trabajo'
     description: Trabajos de los usuarios
@@ -81,9 +79,14 @@ paths:
                 nombre:
                   description: Nombre del tipo de trabajo
                   type: string
+                  format: string
                 descripcion:
                   description: Descripción del trabajo
                   type: string
+                  format: string
+              example:
+                nombre: "Cambio de agua"
+                descripcion: "Cambio de agua cada 500km"
       responses:
         201:
           description: Trabajo creado
@@ -136,6 +139,9 @@ paths:
                     type: array
                     items:
                       $ref: '#/components/schemas/Trabajo'
+              examples:
+                trabajosExamples:
+                  $ref: '#/components/examples/trabajos'
         "400":
           description: "Invalid status value"
 
@@ -158,6 +164,9 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/Trabajo'
+              examples:
+                trabajosExamples:
+                  $ref: '#/components/examples/trabajos'
         '404':
           $ref: '#/components/responses/Response_404'
     delete:
@@ -223,7 +232,7 @@ components:
       schema:
         type: string
       example:
-        GET,DELETE,PUT,OPTIONS
+        GET,POST,DELETE,PUT,OPTIONS
 
   parameters:
     trabajoId:
@@ -333,6 +342,14 @@ components:
           descripcion: Cambio de aceite cada 5000km
           estadoTrabajo: Iniciado
           fechaInicio: '2021-01-30T08:30:00Z'
+          fechaFin: null
+        - trabajoId: 9876
+          idVehiculo: 12345
+          idCliente: 110
+          nombre: Cambio de motor
+          descripcion: Cambio de motor cada 90000km
+          estadoTrabajo: Planificado
+          fechaInicio: '2021-04-20T08:30:00Z'
           fechaFin: null
     response-http-404:
       value:
