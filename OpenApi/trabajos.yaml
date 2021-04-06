@@ -145,6 +145,72 @@ paths:
         "400":
           description: "Invalid status value"
 
+  /trabajo/findByCliente:
+    get:
+      tags:
+        - "Trabajo"
+      summary: "Buscar trabajo por cliente"
+      description: "Buscar trabajos por el cliente que lo ha encargado"
+      operationId: findTrabajoByCliente
+      parameters:
+        - $ref: '#/components/parameters/idCliente'
+      responses:
+        200:
+          description: Array de trabajos
+          headers:
+            ETag:
+              $ref: '#/components/headers/ETag'
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  trabajos:
+                    description: array de trabajos
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/Trabajo'
+              examples:
+                trabajosExamples:
+                  $ref: '#/components/examples/trabajos'
+        "400":
+          description: "Invalid status value"
+        '404':
+          $ref: '#/components/responses/Response_404'
+
+  /trabajo/findByVehiculo:
+    get:
+      tags:
+        - "Trabajo"
+      summary: "Buscar trabajo por identificador vehiculo"
+      description: "Buscar trabajos por el vehículo del cliente que lo ha encargado"
+      operationId: findTrabajoByVehiculo
+      parameters:
+        - $ref: '#/components/parameters/idVehiculo'
+      responses:
+        200:
+          description: Array de trabajos
+          headers:
+            ETag:
+              $ref: '#/components/headers/ETag'
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  trabajos:
+                    description: array de trabajos
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/Trabajo'
+              examples:
+                trabajosExamples:
+                  $ref: '#/components/examples/trabajos'
+        "400":
+          description: "Invalid status value"
+        '404':
+          $ref: '#/components/responses/Response_404'
+
   /trabajo/{trabajoId}:
     parameters:
       - $ref: '#/components/parameters/trabajoId'
@@ -264,6 +330,22 @@ components:
           - "Iniciado"
           - "Terminado"
         default: "Creado"
+    idCliente:
+      name: idCliente
+      in: path
+      description: Id del cliente
+      required: true
+      schema:
+        type: integer
+        pattern: ^\d+$
+    idVehiculo:
+      name: idVehiculo
+      in: path
+      description: Id del vehiculo
+      required: true
+      schema:
+        type: integer
+        pattern: ^\d+$
 
 
   requestBodies:
