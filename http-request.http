@@ -1,0 +1,81 @@
+###
+# CGET 200
+GET http://127.0.0.1:80/api/v1/trabajo
+Accept: application/json
+
+###
+# GET ERROR 422 (validación parámetros)
+GET http://127.0.0.1:80/api/v1/trabajo/abcd
+Accept: application/json
+
+###
+# GET 200
+GET http://127.0.0.1:80/api/v1/trabajo/1234
+Accept: application/json
+
+###
+# GET 200 (dinámico)
+GET http://127.0.0.1:80/api/v1/trabajo/1234?__dynamic=true
+Accept: application/json
+
+###
+# CGET 200 (dinámico)
+GET http://127.0.0.1:80/api/v1/trabajo?__dynamic=true
+Accept: application/json
+
+###
+# POST 201
+POST http://127.0.0.1:80/api/v1/trabajo
+Content-Type: application/json
+
+{
+  "nombre": "Cambio de aceite",
+  "descripcion": "Cambio de aceite cada 5000km"
+}
+
+###
+# POST 201 (dinámico)
+POST http://127.0.0.1:80/api/v1/trabajo
+Prefer: dynamic=true
+Content-Type: application/json
+
+{
+  "nombre": "Cambio de aceite",
+  "descripcion": "Cambio de aceite cada 5000km"
+}
+
+###
+# CGET 404
+GET http://127.0.0.1:80/api/v1/trabajo
+Prefer: code=404
+Accept: application/problem+json
+
+###
+# POST 422
+POST http://127.0.0.1:80/api/v1/trabajo
+Prefer: code=422
+Content-Type: application/json
+
+{
+  "Xref": 7777,
+  "unidades": 77
+}
+
+###
+# COPTIONS 204
+OPTIONS http://127.0.0.1:80/api/v1/trabajo
+Content-Type: application/json
+
+###
+# OPTIONS 204
+OPTIONS http://127.0.0.1:80/api/v1/trabajo/5
+Content-Type: application/json
+
+###
+# POST 201 (dinámico)
+POST http://127.0.0.1:80/api/v1/factura
+Prefer: dynamic=true
+Content-Type: application/json
+
+{}
+
