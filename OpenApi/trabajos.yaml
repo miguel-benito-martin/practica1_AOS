@@ -250,7 +250,7 @@ paths:
       tags:
         - 'Trabajo'
       summary: Modifica un trabajo
-      description: Actualiza los datos de un trabajo
+      description: Actualiza los datos de un trabajo por un trabajoId
       operationId: grupo_1_AOS_put
       parameters:
         - $ref: '#/components/parameters/ifMatchParam'
@@ -269,6 +269,8 @@ paths:
           $ref: '#/components/responses/Response_412'
         '413':
           $ref: '#/components/responses/Response_413'
+        '414':
+          $ref: '#/components/responses/Response_414'
 
 components:
   schemas:
@@ -404,6 +406,15 @@ components:
           examples:
             response-http-412:
               $ref: '#/components/examples/response-http-413'
+    Response_414:
+      description: 'REQUEST-URI TOO LONG: la URI es demasiado larga'
+      content:
+        application/problem+jason:
+          schema:
+            $ref: '#/components/schemas/HTTP_Problems'
+          examples:
+            response-http-412:
+              $ref: '#/components/examples/response-http-414'
     Response_422:
       description: 'UNPROCESSABLE ENTITY: falta algún dato'
       content:
@@ -453,6 +464,13 @@ components:
         title: PAYLOAD TOO LARGE
         status: 413
         detail: Tamaño del dato demasiado grande
+        instance: about:blank
+    response-http-414:
+      value:
+        type: https://httpstatuses.com/414
+        title: REQUEST-URI TOO LONG
+        status: 414
+        detail: Tamaño del URI demasiado grande
         instance: about:blank
     response-http-422:
       value:
