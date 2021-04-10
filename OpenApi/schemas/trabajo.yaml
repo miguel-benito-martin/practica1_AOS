@@ -39,3 +39,12 @@ Trabajo:
       description: Fecha en la que se finaliza el trabajo
       type: string
       format: date-time
+  example:
+    trabajoId: 1234
+    idVehiculo: 98765
+    idCliente: 14
+    nombre: Cambio de agua
+    descripcion: Cambio de agua cada 500km
+    estadoTrabajo: Iniciado
+    fechaInicio: '2021-01-30T08:30:00Z'
+    fechaFin: null
