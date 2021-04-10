@@ -101,6 +101,8 @@ paths:
           $ref: '#/components/responses/Response_413'
         422:
           $ref: '#/components/responses/Response_422'
+        '414':
+          $ref: '#/components/responses/Response_414'
     options:
       tags:
         - 'Trabajo'
@@ -391,7 +393,7 @@ components:
     Response_412:
       description: 'PRECONDITION FAILED: no se cumple alguna condición previa'
       content:
-        application/problem+jason:
+        application/problem+json:
           schema:
             $ref: '#/components/schemas/HTTP_Problems'
           examples:
@@ -400,7 +402,7 @@ components:
     Response_413:
       description: 'PAYLOAD TOO LARGE: el dato es demasiado grande'
       content:
-        application/problem+jason:
+        application/problem+json:
           schema:
             $ref: '#/components/schemas/HTTP_Problems'
           examples:
@@ -409,7 +411,7 @@ components:
     Response_414:
       description: 'REQUEST-URI TOO LONG: la URI es demasiado larga'
       content:
-        application/problem+jason:
+        application/problem+json:
           schema:
             $ref: '#/components/schemas/HTTP_Problems'
           examples:
