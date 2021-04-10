@@ -1,5 +1,7 @@
+<img src="https://cic.etsisi.upm.es/images/logos/Logo-ETSISI.png" alt="ETSISI logo" height="90" >
+
 # Arquitectura Orientada a Servicios 2021 
-###<img src="https://cic.etsisi.upm.es/images/logos/Logo-ETSISI.png" alt="ETSISI logo" height="90" >
+
 ## Subsistema 3: gestión de trabajos de un taller 🧰
 
 ###
