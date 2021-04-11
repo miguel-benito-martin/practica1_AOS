@@ -45,9 +45,21 @@ Content-Type: application/json
 }
 
 ###
+# CGET 400
+GET http://127.0.0.1:80/api/v1/trabajo
+Prefer: code=400
+Accept: application/problem+json
+
+###
 # CGET 404
 GET http://127.0.0.1:80/api/v1/trabajo
 Prefer: code=404
+Accept: application/problem+json
+
+###
+# CGET 414
+GET http://127.0.0.1:80/api/v1/trabajo
+Prefer: code=414
 Accept: application/problem+json
 
 ###
@@ -62,13 +74,25 @@ Content-Type: application/json
 }
 
 ###
+# POST 414
+POST http://127.0.0.1:80/api/v1/trabajo
+Prefer: code=414
+Content-Type: application/json
+
+{
+  "nombre": "Cambio de aceite",
+  "descripcion": "Cambio de aceite cada 5000km"
+}
+
+###
 # COPTIONS 204
 OPTIONS http://127.0.0.1:80/api/v1/trabajo
 Content-Type: application/json
 
 ###
-# OPTIONS 204
+# OPTIONS 405
 OPTIONS http://127.0.0.1:80/api/v1/trabajo/5
+Prefer: code=405
 Content-Type: application/json
 
 ###

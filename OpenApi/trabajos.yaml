@@ -58,8 +58,12 @@ paths:
               examples:
                 trabajosExamples:
                   $ref: '#/components/examples/trabajos'
+        400:
+          $ref: '#/components/responses/Response_400'
         404:
           $ref: '#/components/responses/Response_404'
+        414:
+          $ref: '#/components/responses/Response_414'
     post:
       tags:
         - 'Trabajo'
@@ -97,11 +101,13 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/Trabajo'
-        '413':
+        400:
+          $ref: '#/components/responses/Response_400'
+        413:
           $ref: '#/components/responses/Response_413'
         422:
           $ref: '#/components/responses/Response_422'
-        '414':
+        414:
           $ref: '#/components/responses/Response_414'
     options:
       tags:
@@ -115,6 +121,8 @@ paths:
           headers:
             Allow:
               $ref: '#/components/headers/Allow'
+        '405':
+          $ref: '#/components/responses/Response_405'
 
   /trabajo/findByEstadoTrabajo:
     get:
@@ -144,10 +152,10 @@ paths:
               examples:
                 trabajosExamples:
                   $ref: '#/components/examples/trabajos'
-        "400":
-          description: "Invalid status value"
+        400:
+          $ref: '#/components/responses/Response_400'
 
-  /trabajo/findByCliente:
+  /trabajo/cliente/{idCliente}:
     get:
       tags:
         - "Trabajo"
@@ -157,30 +165,24 @@ paths:
       parameters:
         - $ref: '#/components/parameters/idCliente'
       responses:
-        200:
-          description: Array de trabajos
+        '200':
+          description: Trabajo
           headers:
             ETag:
               $ref: '#/components/headers/ETag'
           content:
             application/json:
               schema:
-                type: object
-                properties:
-                  trabajos:
-                    description: array de trabajos
-                    type: array
-                    items:
-                      $ref: '#/components/schemas/Trabajo'
+                $ref: '#/components/schemas/Trabajo'
               examples:
                 trabajosExamples:
                   $ref: '#/components/examples/trabajos'
-        "400":
-          description: "Invalid status value"
-        '404':
+        400:
+          $ref: '#/components/responses/Response_400'
+        404:
           $ref: '#/components/responses/Response_404'
 
-  /trabajo/findByVehiculo:
+  /trabajo/vehiculo/{idVehiculo}:
     get:
       tags:
         - "Trabajo"
@@ -190,28 +192,23 @@ paths:
       parameters:
         - $ref: '#/components/parameters/idVehiculo'
       responses:
-        200:
-          description: Array de trabajos
+        '200':
+          description: Trabajo
           headers:
             ETag:
               $ref: '#/components/headers/ETag'
           content:
             application/json:
               schema:
-                type: object
-                properties:
-                  trabajos:
-                    description: array de trabajos
-                    type: array
-                    items:
-                      $ref: '#/components/schemas/Trabajo'
+                $ref: '#/components/schemas/Trabajo'
               examples:
                 trabajosExamples:
                   $ref: '#/components/examples/trabajos'
-        "400":
-          description: "Invalid status value"
-        '404':
+        400:
+          $ref: '#/components/responses/Response_400'
+        404:
           $ref: '#/components/responses/Response_404'
+
 
   /trabajo/{trabajoId}:
     parameters:
@@ -224,10 +221,10 @@ paths:
       operationId: grupo_1_AOS_getId
       responses:
         '200':
-          description: Comanda
+          description: Trabajo
           headers:
             ETag:
-              $ref: '#/components/headers/ETag'  #lo hacen ruth y paz
+              $ref: '#/components/headers/ETag'
           content:
             application/json:
               schema:
@@ -235,7 +232,9 @@ paths:
               examples:
                 trabajosExamples:
                   $ref: '#/components/examples/trabajos'
-        '404':
+        400:
+          $ref: '#/components/responses/Response_400'
+        404:
           $ref: '#/components/responses/Response_404'
     delete:
       tags:
@@ -244,9 +243,11 @@ paths:
       description: Elimina un trabajo identificada por `trabajoId`.
       operationId: grupo_1_AOS_delete
       responses:
-        '204':
+        204:
           description: Trabajo eliminado &lt;Cuerpo de la respuesta vacío&gt;
-        '404':
+        400:
+          $ref: '#/components/responses/Response_400'
+        404:
           $ref: '#/components/responses/Response_404'
     put:
       tags:
@@ -259,20 +260,20 @@ paths:
       requestBody:
         $ref: '#/components/requestBodies/trabajoRB'
       responses:
-        '200':
+        200:
           description: 'Todo OK: trabajo modificado'
           content:
             application/json:
               schema:
                 $ref: '#/components/schemas/Trabajo'
-        '404':
+        400:
+          $ref: '#/components/responses/Response_400'
+        404:
           $ref: '#/components/responses/Response_404'
-        '412':
+        412:
           $ref: '#/components/responses/Response_412'
-        '413':
+        413:
           $ref: '#/components/responses/Response_413'
-        '414':
-          $ref: '#/components/responses/Response_414'
 
 components:
   schemas:
@@ -381,6 +382,15 @@ components:
               estadoTrabajo: Creado
 
   responses:
+    Response_400:
+      description: 'BAD REQUEST: request no procesable'
+      content:
+        application/problem+json:
+          schema:
+            $ref: '#/components/schemas/HTTP_Problems'
+          examples:
+            response-http-400:
+              $ref: '#/components/examples/response-http-400'
     Response_404:
       description: 'NOT FOUND: recurso no disponible'
       content:
@@ -390,6 +400,15 @@ components:
           examples:
             response-http-404:
               $ref: '#/components/examples/response-http-404'
+    Response_405:
+      description: 'METHOD NOT ALLOWED: metodo no permitido'
+      content:
+        application/problem+json:
+          schema:
+            $ref: '#/components/schemas/HTTP_Problems'
+          examples:
+            response-http-405:
+              $ref: '#/components/examples/response-http-405'
     Response_412:
       description: 'PRECONDITION FAILED: no se cumple alguna condición previa'
       content:
@@ -406,7 +425,7 @@ components:
           schema:
             $ref: '#/components/schemas/HTTP_Problems'
           examples:
-            response-http-412:
+            response-http-413:
               $ref: '#/components/examples/response-http-413'
     Response_414:
       description: 'REQUEST-URI TOO LONG: la URI es demasiado larga'
@@ -415,7 +434,7 @@ components:
           schema:
             $ref: '#/components/schemas/HTTP_Problems'
           examples:
-            response-http-412:
+            response-http-414:
               $ref: '#/components/examples/response-http-414'
     Response_422:
       description: 'UNPROCESSABLE ENTITY: falta algún dato'
@@ -446,12 +465,26 @@ components:
           estadoTrabajo: Planificado
           fechaInicio: '2021-04-20T08:30:00Z'
           fechaFin: null
+    response-http-400:
+      value:
+        type: https://httpstatuses.com/400
+        title: BAD REQUEST
+        status: 400
+        detail: Request errónea
+        instance: about:blank
     response-http-404:
       value:
         type: https://httpstatuses.com/404
         title: NOT FOUND
         status: 404
         detail: El recurso solicitado no está disponible...
+        instance: about:blank
+    response-http-405:
+      value:
+        type: https://httpstatuses.com/405
+        title: METHOD NOT ALLOWED
+        status: 405
+        detail: El metodo no está permitido
         instance: about:blank
     response-http-412:
       value:
