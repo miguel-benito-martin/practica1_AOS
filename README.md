@@ -1,4 +1,4 @@
-<img src="https://cic.etsisi.upm.es/images/logos/Logo-ETSISI.png" alt="ETSISI logo" height="90" >
+<img src="https://2018.congreso.ritsi.org/wp-content/uploads/sites/19/2018/03/ETSISI.png" alt="ETSISI logo" height="90" >
 
 # Arquitectura Orientada a Servicios 2021 
 
