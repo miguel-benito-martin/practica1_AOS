@@ -39,6 +39,15 @@ Trabajo:
       description: Fecha en la que se finaliza el trabajo
       type: string
       format: date-time
+    links:
+      description: Enlaces de relación
+      type: object
+      properties:
+        trabajos:
+          $ref: './Link.yaml#/Link'
+        self:
+          $ref: './Link.yaml#/Link'
+
   example:
     trabajoId: 1234
     idVehiculo: 98765
@@ -48,3 +57,12 @@ Trabajo:
     estadoTrabajo: Iniciado
     fechaInicio: '2021-01-30T08:30:00Z'
     fechaFin: null
+    links:
+      trabajos:
+        href: /api/v1/trabajo
+        rel: coleccionTrabajos
+        #type: 'GET'
+      self:
+        href: /api/v1/trabajo/1234
+        rel: creado iniciado planificado terminado
+        #type: 'PUT'

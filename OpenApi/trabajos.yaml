@@ -128,9 +128,9 @@ paths:
     get:
       tags:
         - "Trabajo"
-      summary: "Buscar trabajo por estado"
+      summary: "Buscar trabajos por estado"
       description: "Buscar trabajos por su estado actual"
-      operationId: findTrabajoByEstado
+      operationId: grupo_1_AOS_getByEstado
       parameters:
         - $ref: '#/components/parameters/estadoTrabajo'
       responses:
@@ -159,21 +159,27 @@ paths:
     get:
       tags:
         - "Trabajo"
-      summary: "Buscar trabajo por cliente"
+      summary: "Buscar trabajos por cliente"
       description: "Buscar trabajos por el cliente que lo ha encargado"
-      operationId: findTrabajoByCliente
+      operationId: grupo_1_AOS_getByCliente
       parameters:
         - $ref: '#/components/parameters/idCliente'
       responses:
-        '200':
-          description: Trabajo
+        200:
+          description: Array de trabajos
           headers:
             ETag:
               $ref: '#/components/headers/ETag'
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/Trabajo'
+                type: object
+                properties:
+                  trabajos:
+                    description: array de trabajos
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/Trabajo'
               examples:
                 trabajosExamples:
                   $ref: '#/components/examples/trabajos'
@@ -186,21 +192,27 @@ paths:
     get:
       tags:
         - "Trabajo"
-      summary: "Buscar trabajo por identificador vehiculo"
+      summary: "Buscar trabajos por identificador vehiculo"
       description: "Buscar trabajos por el vehículo del cliente que lo ha encargado"
-      operationId: findTrabajoByVehiculo
+      operationId: grupo_1_AOS_getByVehiculo
       parameters:
         - $ref: '#/components/parameters/idVehiculo'
       responses:
-        '200':
-          description: Trabajo
+        200:
+          description: Array de trabajos
           headers:
             ETag:
               $ref: '#/components/headers/ETag'
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/Trabajo'
+                type: object
+                properties:
+                  trabajos:
+                    description: array de trabajos
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/Trabajo'
               examples:
                 trabajosExamples:
                   $ref: '#/components/examples/trabajos'
@@ -457,14 +469,58 @@ components:
           estadoTrabajo: Iniciado
           fechaInicio: '2021-01-30T08:30:00Z'
           fechaFin: null
+          links:
+            trabajos:
+              href: /api/v1/trabajo
+              rel: coleccionTrabajos
+            self:
+              href: /api/v1/trabajo/1234
+              rel: creado iniciado planificado terminado
         - trabajoId: 9876
           idVehiculo: 12345
           idCliente: 110
           nombre: Cambio de motor
           descripcion: Cambio de motor cada 90000km
           estadoTrabajo: Planificado
-          fechaInicio: '2021-04-20T08:30:00Z'
+          fechaInicio: '2021-04-10T08:30:00Z'
           fechaFin: null
+          links:
+            trabajos:
+              href: /api/v1/trabajo
+              rel: coleccionTrabajos
+            self:
+              href: /api/v1/trabajo/9876
+              rel: creado iniciado planificado terminado
+        - trabajoId: 6543
+          idVehiculo: 20216
+          idCliente: 98
+          nombre: Junta de culata
+          descripcion: Arreglar junta de culata por sobrecalentamiento del motor
+          estadoTrabajo: Iniciado
+          fechaInicio: '2020-12-20T08:30:00Z'
+          fechaFin: null
+          links:
+            trabajos:
+              href: /api/v1/trabajo
+              rel: coleccionTrabajos
+            self:
+              href: /api/v1/trabajo/6543
+              rel: creado iniciado planificado terminado
+        - trabajoId: 0258
+          idVehiculo: 74598
+          idCliente: 84
+          nombre: Recambio embrague
+          descripcion: Embrague desgastado por mal uso
+          estadoTrabajo: Terminado
+          fechaInicio: '2021-01-07T08:30:00Z'
+          fechaFin: '2021-01-30T17:30:00Z'
+          links:
+            trabajos:
+              href: /api/v1/trabajo
+              rel: coleccionTrabajos
+            self:
+              href: /api/v1/trabajo/0258
+              rel: creado iniciado planificado terminado
     response-http-400:
       value:
         type: https://httpstatuses.com/400
