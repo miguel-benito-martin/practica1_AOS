@@ -1,4 +1,4 @@
-<img src="https://2018.congreso.ritsi.org/wp-content/uploads/sites/19/2018/03/ETSISI.png" alt="ETSISI logo" height="90" >
+<img src="https://lh3.googleusercontent.com/proxy/Z0Jvqb8p-SIubrGr1N1tPm2MbPXbFA-pLoVnniCD5jPOKM9vedf5DPUCwpTUkpHWQ3WhseRLCFy0IP7EEx8nPGurbuclS2abgFR4A34" alt="ETSISI logo" height="90" >
 
 # Arquitectura Orientada a Servicios 2021 
 
