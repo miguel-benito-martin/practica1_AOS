@@ -79,6 +79,8 @@ paths:
               required:
                 - nombre
                 - descripcion
+                - idVehiculo
+                - idCliente
               properties:
                 nombre:
                   description: Nombre del tipo de trabajo
@@ -88,9 +90,19 @@ paths:
                   description: Descripción del trabajo
                   type: string
                   format: string
+                idVehiculo:
+                  description: Identificador del vehículo
+                  type: integer
+                  format: int32
+                idCliente:
+                  description: Identificador del cliente
+                  type: integer
+                  format: int32
               example:
                 nombre: "Cambio de agua"
                 descripcion: "Cambio de agua cada 500km"
+                idVehiculo: "99999"
+                idCliente: "11111"
       responses:
         201:
           description: Trabajo creado
@@ -570,3 +582,4 @@ components:
         status: 422
         detail: Fallo semántico
         instance: about:blank
+        #hola
