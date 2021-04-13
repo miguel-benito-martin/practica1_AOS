@@ -5,16 +5,16 @@
 ## Subsistema 3: gestión de trabajos de un taller 🧰
 
 ###
-### _**Decisiones de diseño**_
-- Se han añadido tres funciones get para poder realizar búsquedas de trabajos por _cliente_, por _vehículo_ y por _estado_ de los trabajos (por ejemplo, búsqueda de los trabajos cuyo estados es _'planificado'_).
+### _**Consideraciones de diseño**_
+- Se han añadido tres métodos `GET` (además del `getTrabajoId`) para poder realizar búsquedas de trabajos por _cliente_, por _vehículo_ y por _estado_ de los trabajos (por ejemplo, búsqueda de los trabajos cuyo estados es _'planificado'_).
 
-- Se han añadido como claves foráneas de un trabajo los atributos `idCliente` e `idVehiculo`, porque aportan información necesaria. Por otro lado, el estado de un trabajo se ha representado como una enumeración (_creado, planificado, iniciado o terminado_).
+- Se han añadido como claves foráneas de un trabajo los atributos `idCliente` e `idVehiculo`, porque aportan información necesaria. Por otro lado, el estado de un trabajo se ha representado como un enumerado (_creado, planificado, iniciado o terminado_).
 
-- Se ha considerado que el método `POST` necesita los valores de `idVehiculo` e `idCliente`, ya que su función es la de crear nuevos trabajos. Al no haber necesidad de modificar estos valores, el método `PUT` no los tiene incluídos en su especificación.
+- Se ha considerado que el método `POST` necesita los valores de `idVehiculo` e `idCliente` (además del nombre y su descripción), ya que su función es la de crear nuevos trabajos. Al no haber necesidad de modificar estos valores, el método `PUT` no los tiene incluídos en su especificación.
 
-- Consideramos que la especificación cumple con los 4 niveles de madurez de Richardson.
+- Tras la implementación de los métodos `PUT` y `DELETE` (completan las operaciones CRUD), la especificación alcanza el Nivel 2 de madurez de Richardson. Para alcanzar _**the glory of REST**_, se implementa HATEOAS. Se introducen los _links_ para completar la información de un trabajo. En este caso, hacen referencia a la lista de trabajos y a la opción de modificar el estado del trabajo en cuestión.
 
-- Se adjuntan pruebas del http-request de todos los métodos realizados.
+- Se adjuntan pruebas de todos los métodos y _responses_ posibles en el archivo http-request.http.
 
 ### **_Instrucciones para desplegar el servicio 🐳_**
 
@@ -62,7 +62,7 @@ Abrir el _Daemon_ de Docker en la máquina(imprescindible haber instalado Docker
 
 #### 5. Ejecutar Docker Compose
 
-Una vez situado en al carpeta de la especificación, ejecutar el siguiente comando:
+Una vez situado en la carpeta de la especificación, ejecutar el siguiente comando:
 
 - `docker-compose up` (imprescindible estar en la carpeta del proyecto; ya que en esa ruta se encuentra el `.yaml`
 del Docker Compose).
