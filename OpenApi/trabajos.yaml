@@ -101,8 +101,8 @@ paths:
               example:
                 nombre: "Cambio de agua"
                 descripcion: "Cambio de agua cada 500km"
-                idVehiculo: "99999"
-                idCliente: "11111"
+                idVehiculo: 99999
+                idCliente: 11111
       responses:
         201:
           description: Trabajo creado

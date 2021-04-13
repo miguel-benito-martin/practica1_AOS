@@ -4,47 +4,6 @@ GET http://127.0.0.1:80/api/v1/trabajo
 Accept: application/json
 
 ###
-# GET ERROR 422 (validación parámetros)
-GET http://127.0.0.1:80/api/v1/trabajo/abcd
-Accept: application/json
-
-###
-# GET 200
-GET http://127.0.0.1:80/api/v1/trabajo/1234
-Accept: application/json
-
-###
-# GET 200 (dinámico)
-GET http://127.0.0.1:80/api/v1/trabajo/1234?__dynamic=true
-Accept: application/json
-
-###
-# CGET 200 (dinámico)
-GET http://127.0.0.1:80/api/v1/trabajo?__dynamic=true
-Accept: application/json
-
-###
-# POST 201
-POST http://127.0.0.1:80/api/v1/trabajo
-Content-Type: application/json
-
-{
-  "nombre": "Cambio de agua",
-  "descripcion": "Cambio de agua cada 500km"
-}
-
-###
-# POST 201 (dinámico)
-POST http://127.0.0.1:80/api/v1/trabajo
-Prefer: dynamic=true
-Content-Type: application/json
-
-{
-  "nombre": "Cambio de agua",
-  "descripcion": "Cambio de agua cada 500km"
-}
-
-###
 # CGET 400
 GET http://127.0.0.1:80/api/v1/trabajo
 Prefer: code=400
@@ -62,16 +21,93 @@ GET http://127.0.0.1:80/api/v1/trabajo
 Prefer: code=414
 Accept: application/problem+json
 
+# ===================
+# ===================
+
 ###
-# POST 422
+# GET 200
+GET http://127.0.0.1:80/api/v1/trabajo/1234
+Accept: application/json
+
+###
+# GET 400
+GET http://127.0.0.1:80/api/v1/trabajo/1234
+Prefer: code=400
+Accept: application/problem+json
+
+###
+# GET 404
+GET http://127.0.0.1:80/api/v1/trabajo/1234
+Prefer: code=404
+Accept: application/problem+json
+
+# ===================
+# ===================
+
+###
+# GET 200 (dinámico)
+GET http://127.0.0.1:80/api/v1/trabajo/1234?__dynamic=true
+Accept: application/json
+
+###
+# CGET 200 (dinámico)
+GET http://127.0.0.1:80/api/v1/trabajo?__dynamic=true
+Accept: application/json
+
+# ===================
+# ===================
+
+###
+# POST 201
 POST http://127.0.0.1:80/api/v1/trabajo
-Prefer: code=422
 Content-Type: application/json
 
 {
   "nombre": "Cambio de aceite",
-  "descripcion": "Cambio de aceite cada 5000km"
+  "descripcion": "Cambio de aceite cada 5000km",
+  "idVehiculo": 99999,
+  "idCliente": 11111
 }
+
+###
+# POST 201 (dinámico)
+POST http://127.0.0.1:80/api/v1/trabajo
+Prefer: dynamic=true
+Content-Type: application/json
+
+{
+  "nombre": "Cambio de aceite",
+  "descripcion": "Cambio de aceite cada 5000km",
+  "idVehiculo": 99999,
+  "idCliente": 11111
+}
+
+###
+# POST 400
+POST http://127.0.0.1:80/api/v1/trabajo
+Prefer: code=400
+Content-Type: application/json
+
+{
+  "nombre": "Cambio de aceite",
+  "descripcion": "Cambio de aceite cada 5000km",
+  "idVehiculo": 99999,
+  "idCliente": 11111
+}
+
+###
+# POST 413
+POST http://127.0.0.1:80/api/v1/trabajo
+Prefer: code=413
+Content-Type: application/json
+
+{
+  "nombre": "Cambio de aceite",
+  "descripcion": "Cambio de aceite cada 5000km",
+  "idVehiculo": 99999,
+  "idCliente": 11111
+}
+
 
 ###
 # POST 414
@@ -81,8 +117,29 @@ Content-Type: application/json
 
 {
   "nombre": "Cambio de aceite",
-  "descripcion": "Cambio de aceite cada 5000km"
+  "descripcion": "Cambio de aceite cada 5000km",
+  "idVehiculo": 99999,
+  "idCliente": 11111
 }
+
+
+###
+# POST 422
+POST http://127.0.0.1:80/api/v1/trabajo
+Prefer: code=422
+Content-Type: application/json
+
+{
+  "nombre": "Cambio de aceite",
+  "descripcion": "Cambio de aceite cada 5000km",
+  "idVehiculo": "99999",
+  "idCliente": "11111"
+}
+
+###
+## ===================
+## ===================
+
 
 ###
 # COPTIONS 204
@@ -95,11 +152,149 @@ OPTIONS http://127.0.0.1:80/api/v1/trabajo/5
 Prefer: code=405
 Content-Type: application/json
 
+# ===================
+# ===================
+
 ###
-# POST 201 (dinámico)
-POST http://127.0.0.1:80/api/v1/factura
-Prefer: dynamic=true
+# GET 200
+GET http://127.0.0.1:80/api/v1/trabajo/findByEstadoTrabajo?estadoTrabajo=Iniciado
+Accept: application/json
+
+###
+# GET 400
+GET http://127.0.0.1:80/api/v1/trabajo/findByEstadoTrabajo?estadoTrabajo=Iniciado
+Prefer: code=400
+Accept: application/problem+json
+
+# ===================
+# ===================
+
+
+###
+# GET 200
+GET http://127.0.0.1:80/api/v1/trabajo/cliente/1234
+Accept: application/json
+
+###
+# GET 400
+GET http://127.0.0.1:80/api/v1/trabajo/cliente/1234
+Prefer: code=400
+Accept: application/problem+json
+
+###
+# GET 404
+GET http://127.0.0.1:80/api/v1/trabajo/cliente/1234
+Prefer: code=404
+Accept: application/problem+json
+
+# ===================
+# ===================
+
+###
+# GET 200
+GET http://127.0.0.1:80/api/v1/trabajo/vehiculo/1234
+Accept: application/json
+
+###
+# GET 400
+GET http://127.0.0.1:80/api/v1/trabajo/vehiculo/1234
+Prefer: code=400
+Accept: application/problem+json
+
+###
+# GET 404
+GET http://127.0.0.1:80/api/v1/trabajo/vehiculo/1234
+Prefer: code=404
+Accept: application/problem+json
+
+# ===================
+# ===================
+
+###
+# DELETE 204
+DELETE http://127.0.0.1:80/api/v1/trabajo/1234
+Accept: */*
+
+###
+# DELETE 400
+DELETE http://127.0.0.1:80/api/v1/trabajo/1234
+Prefer: code=400
+Accept: application/problem+json
+
+###
+# DELETE 404
+DELETE http://127.0.0.1:80/api/v1/trabajo/1234
+Prefer: code=404
+Accept: application/problem+json
+
+# ===================
+# ===================
+
+###
+# PUT 200
+PUT http://127.0.0.1:80/api/v1/trabajo/1234
+Accept: application/json
+If-Match: 212121
 Content-Type: application/json
 
-{}
+{
+  "nombre": "Reparación de frenos",
+  "descripcion": "Reparación del freno derecho",
+  "estadoTrabajo": "Creado"
+}
 
+###
+# PUT 400
+PUT http://127.0.0.1:80/api/v1/trabajo/1234
+Prefer: code=400
+Accept: application/problem+json
+If-Match: 212121
+Content-Type: application/json
+
+{
+  "nombre": "Reparación de frenos",
+  "descripcion": "Reparación del freno derecho",
+  "estadoTrabajo": "Creado"
+}
+
+###
+# PUT 404
+PUT http://127.0.0.1:80/api/v1/trabajo/1234
+Prefer: code=404
+Accept: application/problem+json
+If-Match: 212121
+Content-Type: application/json
+
+{
+  "nombre": "Reparación de frenos",
+  "descripcion": "Reparación del freno derecho",
+  "estadoTrabajo": "Creado"
+}
+
+###
+# PUT 412
+PUT http://127.0.0.1:80/api/v1/trabajo/1234
+Prefer: code=412
+Accept: application/problem+json
+If-Match: 212121
+Content-Type: application/json
+
+{
+  "nombre": "Reparación de frenos",
+  "descripcion": "Reparación del freno derecho",
+  "estadoTrabajo": "Creado"
+}
+
+###
+# PUT 413
+PUT http://127.0.0.1:80/api/v1/trabajo/1234
+Prefer: code=413
+Accept: application/problem+json
+If-Match: 212121
+Content-Type: application/json
+
+{
+  "nombre": "Reparación de frenos",
+  "descripcion": "Reparación del freno derecho",
+  "estadoTrabajo": "Creado"
+}
