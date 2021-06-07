@@ -7,6 +7,8 @@ import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonValue;
 import io.swagger.model.TrabajoLinks;
 import io.swagger.v3.oas.annotations.media.Schema;
+import org.springframework.data.annotation.Id;
+import org.springframework.data.mongodb.core.mapping.Document;
 import org.threeten.bp.OffsetDateTime;
 import org.springframework.validation.annotation.Validated;
 
@@ -20,9 +22,10 @@ import javax.validation.constraints.*;
 @Validated
 @javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.SpringCodegen", date = "2021-06-05T16:35:07.675362500+02:00[Europe/Paris]")
 
-
+@Document(collection = "demo")
 public class Trabajo {
     @JsonProperty("trabajoId")
+    @Id
     private Integer trabajoId = null;
 
     @JsonProperty("idVehiculo")
@@ -87,6 +90,15 @@ public class Trabajo {
     public Trabajo trabajoId(Integer trabajoId) {
         this.trabajoId = trabajoId;
         return this;
+    }
+
+    public Trabajo(Integer trabajoId, Integer idVehiculo, Integer idCliente, String nombre, String descripcion, EstadoTrabajoEnum estadoTrabajo) {
+        this.trabajoId = trabajoId;
+        this.idVehiculo = idVehiculo;
+        this.idCliente = idCliente;
+        this.nombre = nombre;
+        this.descripcion = descripcion;
+        this.estadoTrabajo = estadoTrabajo;
     }
 
     /**

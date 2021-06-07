@@ -32,6 +32,7 @@ import org.springframework.web.bind.annotation.CookieValue;
 
 import javax.validation.Valid;
 import javax.validation.constraints.*;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
@@ -64,7 +65,7 @@ public interface TrabajoApi {
     @RequestMapping(value = "/trabajo",
             produces = {"application/json", "application/problem+json"},
             method = RequestMethod.GET)
-    ResponseEntity<InlineResponse200> grupo1AOSGet();
+    ResponseEntity<ArrayList<Trabajo>> grupo1AOSGet();
 
 
     @Operation(summary = "Buscar trabajos por cliente", description = "Buscar trabajos por el cliente que lo ha encargado", tags = {"Trabajo"})
@@ -144,7 +145,7 @@ public interface TrabajoApi {
             produces = {"application/json", "application/problem+json"},
             consumes = {"application/json"},
             method = RequestMethod.POST)
-    ResponseEntity<Trabajo> grupo1AOSPost(@Parameter(in = ParameterIn.DEFAULT, description = "", required = true, schema = @Schema()) @Valid @RequestBody TrabajoBody body);
+    ResponseEntity<Trabajo> grupo1AOSPost(@Parameter(in = ParameterIn.DEFAULT, description = "", required = true, schema = @Schema()) @Valid @RequestBody Trabajo body);
 
 
     @Operation(summary = "Modifica un trabajo", description = "Actualiza los datos de un trabajo por un trabajoId", tags = {"Trabajo"})

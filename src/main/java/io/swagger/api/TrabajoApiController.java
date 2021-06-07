@@ -16,6 +16,7 @@ import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.RestController;
@@ -32,6 +33,7 @@ import javax.validation.constraints.*;
 import javax.validation.Valid;
 import javax.servlet.http.HttpServletRequest;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
@@ -45,18 +47,33 @@ public class TrabajoApiController implements TrabajoApi {
 
     private final HttpServletRequest request;
 
+    @Autowired
+    private TrabajoPersistencia bdTrabajos;
+
     @org.springframework.beans.factory.annotation.Autowired
     public TrabajoApiController(ObjectMapper objectMapper, HttpServletRequest request) {
         this.objectMapper = objectMapper;
         this.request = request;
     }
 
-    public ResponseEntity<Void> grupo1AOSDelete(@Pattern(regexp="^\\d+$") @Parameter(in = ParameterIn.PATH, description = "ID del trabajo", required=true, schema=@Schema()) @PathVariable("trabajoId") Integer trabajoId) {
+    public ResponseEntity<Void> grupo1AOSDelete(@Pattern(regexp = "^\\d+$") @Parameter(in = ParameterIn.PATH, description = "ID del trabajo", required = true, schema = @Schema()) @PathVariable("trabajoId") Integer trabajoId) {
         String accept = request.getHeader("Accept");
         return new ResponseEntity<Void>(HttpStatus.NOT_IMPLEMENTED);
     }
 
-    public ResponseEntity<InlineResponse200> grupo1AOSGet() {
+    public ResponseEntity<ArrayList<Trabajo>> grupo1AOSGet() {
+        String accept = request.getHeader("Accept");
+        if (accept != null && accept.contains("application/json")) {
+            ArrayList<Trabajo> trabajos = (ArrayList<Trabajo>) bdTrabajos.findAll();
+            return new ResponseEntity<ArrayList<Trabajo>>(trabajos,HttpStatus.OK);
+            //return new ResponseEntity<List<Job>>(jobs, HttpStatus.OK);
+            //return new ResponseEntity<InlineResponse200>(objectMapper.readValue("{\r\n  \"trabajos\" : [ {\r\n    \"trabajoId\" : 1234,\r\n    \"idVehiculo\" : 98765,\r\n    \"idCliente\" : 14,\r\n    \"nombre\" : \"Cambio de agua\",\r\n    \"descripcion\" : \"Cambio de agua cada 500km\",\r\n    \"estadoTrabajo\" : \"Iniciado\",\r\n    \"fechaInicio\" : \"2021-01-30T08:30:00Z\",\r\n    \"links\" : {\r\n      \"trabajos\" : {\r\n        \"href\" : \"/api/v1/trabajo\",\r\n        \"rel\" : \"coleccionTrabajos\"\r\n      },\r\n      \"self\" : {\r\n        \"href\" : \"/api/v1/trabajo/1234\",\r\n        \"rel\" : \"creado iniciado planificado terminado\"\r\n      }\r\n    }\r\n  }, {\r\n    \"trabajoId\" : 1234,\r\n    \"idVehiculo\" : 98765,\r\n    \"idCliente\" : 14,\r\n    \"nombre\" : \"Cambio de agua\",\r\n    \"descripcion\" : \"Cambio de agua cada 500km\",\r\n    \"estadoTrabajo\" : \"Iniciado\",\r\n    \"fechaInicio\" : \"2021-01-30T08:30:00Z\",\r\n    \"links\" : {\r\n      \"trabajos\" : {\r\n        \"href\" : \"/api/v1/trabajo\",\r\n        \"rel\" : \"coleccionTrabajos\"\r\n      },\r\n      \"self\" : {\r\n        \"href\" : \"/api/v1/trabajo/1234\",\r\n        \"rel\" : \"creado iniciado planificado terminado\"\r\n      }\r\n    }\r\n  } ]\r\n}", InlineResponse200.class), HttpStatus.NOT_IMPLEMENTED);
+        }
+
+        return new ResponseEntity<ArrayList<Trabajo>>(HttpStatus.NOT_IMPLEMENTED);
+    }
+
+    public ResponseEntity<InlineResponse200> grupo1AOSGetByCliente(@Pattern(regexp = "^\\d+$") @Parameter(in = ParameterIn.PATH, description = "Id del cliente", required = true, schema = @Schema()) @PathVariable("idCliente") Integer idCliente) {
         String accept = request.getHeader("Accept");
         if (accept != null && accept.contains("application/json")) {
             try {
@@ -70,7 +87,8 @@ public class TrabajoApiController implements TrabajoApi {
         return new ResponseEntity<InlineResponse200>(HttpStatus.NOT_IMPLEMENTED);
     }
 
-    public ResponseEntity<InlineResponse200> grupo1AOSGetByCliente(@Pattern(regexp="^\\d+$") @Parameter(in = ParameterIn.PATH, description = "Id del cliente", required=true, schema=@Schema()) @PathVariable("idCliente") Integer idCliente) {
+    public ResponseEntity<InlineResponse200> grupo1AOSGetByEstado(@NotNull @Parameter(in = ParameterIn.QUERY, description = "Elegir tipo de trabajo para su búsqueda", required = true, schema = @Schema(allowableValues = {"Creado", "Planificado", "Iniciado", "Terminado"}
+            , defaultValue = "Creado")) @Valid @RequestParam(value = "estadoTrabajo", required = true, defaultValue = "Creado") String estadoTrabajo) {
         String accept = request.getHeader("Accept");
         if (accept != null && accept.contains("application/json")) {
             try {
@@ -84,8 +102,7 @@ public class TrabajoApiController implements TrabajoApi {
         return new ResponseEntity<InlineResponse200>(HttpStatus.NOT_IMPLEMENTED);
     }
 
-    public ResponseEntity<InlineResponse200> grupo1AOSGetByEstado(@NotNull @Parameter(in = ParameterIn.QUERY, description = "Elegir tipo de trabajo para su búsqueda" ,required=true,schema=@Schema(allowableValues={ "Creado", "Planificado", "Iniciado", "Terminado" }
-, defaultValue="Creado")) @Valid @RequestParam(value = "estadoTrabajo", required = true, defaultValue="Creado") String estadoTrabajo) {
+    public ResponseEntity<InlineResponse200> grupo1AOSGetByVehiculo(@Pattern(regexp = "^\\d+$") @Parameter(in = ParameterIn.PATH, description = "Id del vehiculo", required = true, schema = @Schema()) @PathVariable("idVehiculo") Integer idVehiculo) {
         String accept = request.getHeader("Accept");
         if (accept != null && accept.contains("application/json")) {
             try {
@@ -99,21 +116,7 @@ public class TrabajoApiController implements TrabajoApi {
         return new ResponseEntity<InlineResponse200>(HttpStatus.NOT_IMPLEMENTED);
     }
 
-    public ResponseEntity<InlineResponse200> grupo1AOSGetByVehiculo(@Pattern(regexp="^\\d+$") @Parameter(in = ParameterIn.PATH, description = "Id del vehiculo", required=true, schema=@Schema()) @PathVariable("idVehiculo") Integer idVehiculo) {
-        String accept = request.getHeader("Accept");
-        if (accept != null && accept.contains("application/json")) {
-            try {
-                return new ResponseEntity<InlineResponse200>(objectMapper.readValue("{\r\n  \"trabajos\" : [ {\r\n    \"trabajoId\" : 1234,\r\n    \"idVehiculo\" : 98765,\r\n    \"idCliente\" : 14,\r\n    \"nombre\" : \"Cambio de agua\",\r\n    \"descripcion\" : \"Cambio de agua cada 500km\",\r\n    \"estadoTrabajo\" : \"Iniciado\",\r\n    \"fechaInicio\" : \"2021-01-30T08:30:00Z\",\r\n    \"links\" : {\r\n      \"trabajos\" : {\r\n        \"href\" : \"/api/v1/trabajo\",\r\n        \"rel\" : \"coleccionTrabajos\"\r\n      },\r\n      \"self\" : {\r\n        \"href\" : \"/api/v1/trabajo/1234\",\r\n        \"rel\" : \"creado iniciado planificado terminado\"\r\n      }\r\n    }\r\n  }, {\r\n    \"trabajoId\" : 1234,\r\n    \"idVehiculo\" : 98765,\r\n    \"idCliente\" : 14,\r\n    \"nombre\" : \"Cambio de agua\",\r\n    \"descripcion\" : \"Cambio de agua cada 500km\",\r\n    \"estadoTrabajo\" : \"Iniciado\",\r\n    \"fechaInicio\" : \"2021-01-30T08:30:00Z\",\r\n    \"links\" : {\r\n      \"trabajos\" : {\r\n        \"href\" : \"/api/v1/trabajo\",\r\n        \"rel\" : \"coleccionTrabajos\"\r\n      },\r\n      \"self\" : {\r\n        \"href\" : \"/api/v1/trabajo/1234\",\r\n        \"rel\" : \"creado iniciado planificado terminado\"\r\n      }\r\n    }\r\n  } ]\r\n}", InlineResponse200.class), HttpStatus.NOT_IMPLEMENTED);
-            } catch (IOException e) {
-                log.error("Couldn't serialize response for content type application/json", e);
-                return new ResponseEntity<InlineResponse200>(HttpStatus.INTERNAL_SERVER_ERROR);
-            }
-        }
-
-        return new ResponseEntity<InlineResponse200>(HttpStatus.NOT_IMPLEMENTED);
-    }
-
-    public ResponseEntity<Trabajo> grupo1AOSGetId(@Pattern(regexp="^\\d+$") @Parameter(in = ParameterIn.PATH, description = "ID del trabajo", required=true, schema=@Schema()) @PathVariable("trabajoId") Integer trabajoId) {
+    public ResponseEntity<Trabajo> grupo1AOSGetId(@Pattern(regexp = "^\\d+$") @Parameter(in = ParameterIn.PATH, description = "ID del trabajo", required = true, schema = @Schema()) @PathVariable("trabajoId") Integer trabajoId) {
         String accept = request.getHeader("Accept");
         if (accept != null && accept.contains("application/json")) {
             try {
@@ -132,21 +135,19 @@ public class TrabajoApiController implements TrabajoApi {
         return new ResponseEntity<Void>(HttpStatus.NOT_IMPLEMENTED);
     }
 
-    public ResponseEntity<Trabajo> grupo1AOSPost(@Parameter(in = ParameterIn.DEFAULT, description = "", required=true, schema=@Schema()) @Valid @RequestBody TrabajoBody body) {
+    public ResponseEntity<Trabajo> grupo1AOSPost(@Parameter(in = ParameterIn.DEFAULT, description = "", required = true, schema = @Schema()) @Valid @RequestBody Trabajo body) {
         String accept = request.getHeader("Accept");
         if (accept != null && accept.contains("application/json")) {
-            try {
-                return new ResponseEntity<Trabajo>(objectMapper.readValue("{\r\n  \"trabajoId\" : 1234,\r\n  \"idVehiculo\" : 98765,\r\n  \"idCliente\" : 14,\r\n  \"nombre\" : \"Cambio de agua\",\r\n  \"descripcion\" : \"Cambio de agua cada 500km\",\r\n  \"estadoTrabajo\" : \"Iniciado\",\r\n  \"fechaInicio\" : \"2021-01-30T08:30:00Z\",\r\n  \"links\" : {\r\n    \"trabajos\" : {\r\n      \"href\" : \"/api/v1/trabajo\",\r\n      \"rel\" : \"coleccionTrabajos\"\r\n    },\r\n    \"self\" : {\r\n      \"href\" : \"/api/v1/trabajo/1234\",\r\n      \"rel\" : \"creado iniciado planificado terminado\"\r\n    }\r\n  }\r\n}", Trabajo.class), HttpStatus.NOT_IMPLEMENTED);
-            } catch (IOException e) {
-                log.error("Couldn't serialize response for content type application/json", e);
-                return new ResponseEntity<Trabajo>(HttpStatus.INTERNAL_SERVER_ERROR);
-            }
+            System.out.println(body.toString());
+            bdTrabajos.save(body);
+            return new ResponseEntity<Trabajo>(HttpStatus.CREATED);
+            //return new ResponseEntity<Trabajo>(objectMapper.readValue("{\r\n  \"trabajoId\" : 1234,\r\n  \"idVehiculo\" : 98765,\r\n  \"idCliente\" : 14,\r\n  \"nombre\" : \"Cambio de agua\",\r\n  \"descripcion\" : \"Cambio de agua cada 500km\",\r\n  \"estadoTrabajo\" : \"Iniciado\",\r\n  \"fechaInicio\" : \"2021-01-30T08:30:00Z\",\r\n  \"links\" : {\r\n    \"trabajos\" : {\r\n      \"href\" : \"/api/v1/trabajo\",\r\n      \"rel\" : \"coleccionTrabajos\"\r\n    },\r\n    \"self\" : {\r\n      \"href\" : \"/api/v1/trabajo/1234\",\r\n      \"rel\" : \"creado iniciado planificado terminado\"\r\n    }\r\n  }\r\n}", Trabajo.class), HttpStatus.NOT_IMPLEMENTED);
         }
 
         return new ResponseEntity<Trabajo>(HttpStatus.NOT_IMPLEMENTED);
     }
 
-    public ResponseEntity<Trabajo> grupo1AOSPut(@Parameter(in = ParameterIn.HEADER, description = "ETag del recurso que se desea modificar" ,required=true,schema=@Schema()) @RequestHeader(value="If-Match", required=true) String ifMatch,@Pattern(regexp="^\\d+$") @Parameter(in = ParameterIn.PATH, description = "ID del trabajo", required=true, schema=@Schema()) @PathVariable("trabajoId") Integer trabajoId,@Parameter(in = ParameterIn.DEFAULT, description = "`Trabajo` data", required=true, schema=@Schema()) @Valid @RequestBody Object body) {
+    public ResponseEntity<Trabajo> grupo1AOSPut(@Parameter(in = ParameterIn.HEADER, description = "ETag del recurso que se desea modificar", required = true, schema = @Schema()) @RequestHeader(value = "If-Match", required = true) String ifMatch, @Pattern(regexp = "^\\d+$") @Parameter(in = ParameterIn.PATH, description = "ID del trabajo", required = true, schema = @Schema()) @PathVariable("trabajoId") Integer trabajoId, @Parameter(in = ParameterIn.DEFAULT, description = "`Trabajo` data", required = true, schema = @Schema()) @Valid @RequestBody Object body) {
         String accept = request.getHeader("Accept");
         if (accept != null && accept.contains("application/json")) {
             try {
