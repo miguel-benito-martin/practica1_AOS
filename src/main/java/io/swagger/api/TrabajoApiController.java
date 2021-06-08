@@ -59,9 +59,9 @@ public class TrabajoApiController implements TrabajoApi {
 
     public ResponseEntity<Void> grupo1AOSDelete(@Parameter(in = ParameterIn.PATH, description = "ID del trabajo", required = true, schema = @Schema()) @PathVariable("trabajoId") Integer trabajoId) {
         String accept = request.getHeader("Accept");
-        if (!bdTrabajos.findById(trabajoId).isPresent() && accept != null && accept.contains("application/json")) {
+        if (!bdTrabajos.findById(trabajoId).isPresent())
             return new ResponseEntity<Void>(HttpStatus.NOT_FOUND);
-        } else {
+        else {
             bdTrabajos.deleteById(trabajoId);
             return new ResponseEntity<Void>(HttpStatus.OK);
         }
@@ -71,7 +71,10 @@ public class TrabajoApiController implements TrabajoApi {
         String accept = request.getHeader("Accept");
         if (accept != null && accept.contains("application/json")) {
             ArrayList<Trabajo> trabajos = (ArrayList<Trabajo>) bdTrabajos.findAll();
-            return new ResponseEntity<ArrayList<Trabajo>>(trabajos, HttpStatus.OK);
+            if(trabajos.isEmpty())
+                return new ResponseEntity<ArrayList<Trabajo>>(HttpStatus.NOT_FOUND);
+            else
+                return new ResponseEntity<ArrayList<Trabajo>>(trabajos, HttpStatus.OK);
         }
 
         return new ResponseEntity<ArrayList<Trabajo>>(HttpStatus.NOT_IMPLEMENTED);
@@ -106,27 +109,31 @@ public class TrabajoApiController implements TrabajoApi {
         return new ResponseEntity<InlineResponse200>(HttpStatus.NOT_IMPLEMENTED);
     }
 
-    public ResponseEntity<InlineResponse200> grupo1AOSGetByVehiculo(@Parameter(in = ParameterIn.PATH, description = "Id del vehiculo", required = true, schema = @Schema()) @PathVariable("idVehiculo") Integer idVehiculo) {
+    public ResponseEntity<ArrayList<Trabajo>> grupo1AOSGetByVehiculo(@Parameter(in = ParameterIn.PATH, description = "Id del vehiculo", required = true, schema = @Schema()) @PathVariable("idVehiculo") Integer idVehiculo) {
         String accept = request.getHeader("Accept");
-        if (accept != null && accept.contains("application/json")) {
-            try {
-                return new ResponseEntity<InlineResponse200>(objectMapper.readValue("{\r\n  \"trabajos\" : [ {\r\n    \"trabajoId\" : 1234,\r\n    \"idVehiculo\" : 98765,\r\n    \"idCliente\" : 14,\r\n    \"nombre\" : \"Cambio de agua\",\r\n    \"descripcion\" : \"Cambio de agua cada 500km\",\r\n    \"estadoTrabajo\" : \"Iniciado\",\r\n    \"fechaInicio\" : \"2021-01-30T08:30:00Z\",\r\n    \"links\" : {\r\n      \"trabajos\" : {\r\n        \"href\" : \"/api/v1/trabajo\",\r\n        \"rel\" : \"coleccionTrabajos\"\r\n      },\r\n      \"self\" : {\r\n        \"href\" : \"/api/v1/trabajo/1234\",\r\n        \"rel\" : \"creado iniciado planificado terminado\"\r\n      }\r\n    }\r\n  }, {\r\n    \"trabajoId\" : 1234,\r\n    \"idVehiculo\" : 98765,\r\n    \"idCliente\" : 14,\r\n    \"nombre\" : \"Cambio de agua\",\r\n    \"descripcion\" : \"Cambio de agua cada 500km\",\r\n    \"estadoTrabajo\" : \"Iniciado\",\r\n    \"fechaInicio\" : \"2021-01-30T08:30:00Z\",\r\n    \"links\" : {\r\n      \"trabajos\" : {\r\n        \"href\" : \"/api/v1/trabajo\",\r\n        \"rel\" : \"coleccionTrabajos\"\r\n      },\r\n      \"self\" : {\r\n        \"href\" : \"/api/v1/trabajo/1234\",\r\n        \"rel\" : \"creado iniciado planificado terminado\"\r\n      }\r\n    }\r\n  } ]\r\n}", InlineResponse200.class), HttpStatus.NOT_IMPLEMENTED);
-            } catch (IOException e) {
-                log.error("Couldn't serialize response for content type application/json", e);
-                return new ResponseEntity<InlineResponse200>(HttpStatus.INTERNAL_SERVER_ERROR);
+        if (accept != null && accept.contains("application/json")){
+            ArrayList<Trabajo> trabajos = new ArrayList<>();
+            for (Trabajo trabajo : bdTrabajos.findByIdVehiculo(idVehiculo)) {
+                trabajos.add(trabajo);
             }
+            if(trabajos.isEmpty())
+                return new ResponseEntity<ArrayList<Trabajo>>(HttpStatus.NOT_FOUND);
+            else
+                return new ResponseEntity<ArrayList<Trabajo>>(trabajos, HttpStatus.OK);
         }
-
-        return new ResponseEntity<InlineResponse200>(HttpStatus.NOT_IMPLEMENTED);
+        return new ResponseEntity<ArrayList<Trabajo>>(HttpStatus.NOT_IMPLEMENTED);
     }
 
     public ResponseEntity<Trabajo> grupo1AOSGetId(@Parameter(in = ParameterIn.PATH, description = "ID del trabajo", required = true, schema = @Schema()) @PathVariable("trabajoId") Integer trabajoId) {
         String accept = request.getHeader("Accept");
-        Optional<Trabajo> trabajo = bdTrabajos.findById(trabajoId);
-        if(trabajo.isPresent() && accept != null && accept.contains("application/json"))
-            return new ResponseEntity<Trabajo>(trabajo.get(), HttpStatus.OK);
-        else
-            return new ResponseEntity<Trabajo>(HttpStatus.NOT_FOUND);
+        if (accept != null && accept.contains("application/json")) {
+            Optional<Trabajo> trabajo = bdTrabajos.findById(trabajoId);
+            if (trabajo.isPresent())
+                return new ResponseEntity<Trabajo>(trabajo.get(), HttpStatus.OK);
+            else
+                return new ResponseEntity<Trabajo>(HttpStatus.NOT_FOUND);
+        }
+        return new ResponseEntity<Trabajo>(HttpStatus.NOT_IMPLEMENTED);
     }
 
     public ResponseEntity<Void> grupo1AOSOptions() {
@@ -136,12 +143,10 @@ public class TrabajoApiController implements TrabajoApi {
 
     public ResponseEntity<Trabajo> grupo1AOSPost(@Parameter(in = ParameterIn.DEFAULT, description = "", required = true, schema = @Schema()) @Valid @RequestBody Trabajo body) {
         String accept = request.getHeader("Accept");
-        if (accept != null && accept.contains("application/json")) {
-            System.out.println(body.toString());
+        if (accept != null && accept.contains("application/json")){
             bdTrabajos.save(body);
             return new ResponseEntity<Trabajo>(HttpStatus.CREATED);
         }
-
         return new ResponseEntity<Trabajo>(HttpStatus.NOT_IMPLEMENTED);
     }
 

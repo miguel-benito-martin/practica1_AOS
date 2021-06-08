@@ -103,7 +103,7 @@ public interface TrabajoApi {
     @RequestMapping(value = "/trabajo/vehiculo/{idVehiculo}",
             produces = {"application/json", "application/problem+json"},
             method = RequestMethod.GET)
-    ResponseEntity<InlineResponse200> grupo1AOSGetByVehiculo(@Parameter(in = ParameterIn.PATH, description = "Id del vehiculo", required = true, schema = @Schema()) @PathVariable("idVehiculo") Integer idVehiculo);
+    ResponseEntity<ArrayList<Trabajo>> grupo1AOSGetByVehiculo(@Parameter(in = ParameterIn.PATH, description = "Id del vehiculo", required = true, schema = @Schema()) @PathVariable("idVehiculo") Integer idVehiculo);
 
 
     @Operation(summary = "Buscar un trabajo por su ID", description = "Devuelve el trabajo especificado por `trabajoId`", tags = {"Trabajo"})
