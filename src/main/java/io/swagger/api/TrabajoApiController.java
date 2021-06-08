@@ -80,33 +80,38 @@ public class TrabajoApiController implements TrabajoApi {
         return new ResponseEntity<ArrayList<Trabajo>>(HttpStatus.NOT_IMPLEMENTED);
     }
 
-    public ResponseEntity<InlineResponse200> grupo1AOSGetByCliente(@Parameter(in = ParameterIn.PATH, description = "Id del cliente", required = true, schema = @Schema()) @PathVariable("idCliente") Integer idCliente) {
+    public ResponseEntity<ArrayList<Trabajo>> grupo1AOSGetByCliente(@Parameter(in = ParameterIn.PATH, description = "Id del cliente", required = true, schema = @Schema()) @PathVariable("idCliente") Integer idCliente) {
         String accept = request.getHeader("Accept");
-        if (accept != null && accept.contains("application/json")) {
-            try {
-                return new ResponseEntity<InlineResponse200>(objectMapper.readValue("{\r\n  \"trabajos\" : [ {\r\n    \"trabajoId\" : 1234,\r\n    \"idVehiculo\" : 98765,\r\n    \"idCliente\" : 14,\r\n    \"nombre\" : \"Cambio de agua\",\r\n    \"descripcion\" : \"Cambio de agua cada 500km\",\r\n    \"estadoTrabajo\" : \"Iniciado\",\r\n    \"fechaInicio\" : \"2021-01-30T08:30:00Z\",\r\n    \"links\" : {\r\n      \"trabajos\" : {\r\n        \"href\" : \"/api/v1/trabajo\",\r\n        \"rel\" : \"coleccionTrabajos\"\r\n      },\r\n      \"self\" : {\r\n        \"href\" : \"/api/v1/trabajo/1234\",\r\n        \"rel\" : \"creado iniciado planificado terminado\"\r\n      }\r\n    }\r\n  }, {\r\n    \"trabajoId\" : 1234,\r\n    \"idVehiculo\" : 98765,\r\n    \"idCliente\" : 14,\r\n    \"nombre\" : \"Cambio de agua\",\r\n    \"descripcion\" : \"Cambio de agua cada 500km\",\r\n    \"estadoTrabajo\" : \"Iniciado\",\r\n    \"fechaInicio\" : \"2021-01-30T08:30:00Z\",\r\n    \"links\" : {\r\n      \"trabajos\" : {\r\n        \"href\" : \"/api/v1/trabajo\",\r\n        \"rel\" : \"coleccionTrabajos\"\r\n      },\r\n      \"self\" : {\r\n        \"href\" : \"/api/v1/trabajo/1234\",\r\n        \"rel\" : \"creado iniciado planificado terminado\"\r\n      }\r\n    }\r\n  } ]\r\n}", InlineResponse200.class), HttpStatus.NOT_IMPLEMENTED);
-            } catch (IOException e) {
-                log.error("Couldn't serialize response for content type application/json", e);
-                return new ResponseEntity<InlineResponse200>(HttpStatus.INTERNAL_SERVER_ERROR);
+        if (accept != null && accept.contains("application/json")){
+            ArrayList<Trabajo> trabajos = new ArrayList<>();
+            for (Trabajo trabajo : bdTrabajos.findByIdCliente(idCliente)) {
+                trabajos.add(trabajo);
             }
+            if(trabajos.isEmpty())
+                return new ResponseEntity<ArrayList<Trabajo>>(HttpStatus.NOT_FOUND);
+            else
+                return new ResponseEntity<ArrayList<Trabajo>>(trabajos, HttpStatus.OK);
         }
-
-        return new ResponseEntity<InlineResponse200>(HttpStatus.NOT_IMPLEMENTED);
+        return new ResponseEntity<ArrayList<Trabajo>>(HttpStatus.NOT_IMPLEMENTED);
     }
 
-    public ResponseEntity<InlineResponse200> grupo1AOSGetByEstado(@NotNull @Parameter(in = ParameterIn.QUERY, description = "Elegir tipo de trabajo para su búsqueda", required = true, schema = @Schema(allowableValues = {"Creado", "Planificado", "Iniciado", "Terminado"}
+    public ResponseEntity<ArrayList<Trabajo>> grupo1AOSGetByEstado(@NotNull @Parameter(in = ParameterIn.QUERY, description = "Elegir tipo de trabajo para su búsqueda", required = true, schema = @Schema(allowableValues = {"Creado", "Planificado", "Iniciado", "Terminado"}
             , defaultValue = "Creado")) @Valid @RequestParam(value = "estadoTrabajo", required = true, defaultValue = "Creado") String estadoTrabajo) {
         String accept = request.getHeader("Accept");
         if (accept != null && accept.contains("application/json")) {
-            try {
-                return new ResponseEntity<InlineResponse200>(objectMapper.readValue("{\r\n  \"trabajos\" : [ {\r\n    \"trabajoId\" : 1234,\r\n    \"idVehiculo\" : 98765,\r\n    \"idCliente\" : 14,\r\n    \"nombre\" : \"Cambio de agua\",\r\n    \"descripcion\" : \"Cambio de agua cada 500km\",\r\n    \"estadoTrabajo\" : \"Iniciado\",\r\n    \"fechaInicio\" : \"2021-01-30T08:30:00Z\",\r\n    \"links\" : {\r\n      \"trabajos\" : {\r\n        \"href\" : \"/api/v1/trabajo\",\r\n        \"rel\" : \"coleccionTrabajos\"\r\n      },\r\n      \"self\" : {\r\n        \"href\" : \"/api/v1/trabajo/1234\",\r\n        \"rel\" : \"creado iniciado planificado terminado\"\r\n      }\r\n    }\r\n  }, {\r\n    \"trabajoId\" : 1234,\r\n    \"idVehiculo\" : 98765,\r\n    \"idCliente\" : 14,\r\n    \"nombre\" : \"Cambio de agua\",\r\n    \"descripcion\" : \"Cambio de agua cada 500km\",\r\n    \"estadoTrabajo\" : \"Iniciado\",\r\n    \"fechaInicio\" : \"2021-01-30T08:30:00Z\",\r\n    \"links\" : {\r\n      \"trabajos\" : {\r\n        \"href\" : \"/api/v1/trabajo\",\r\n        \"rel\" : \"coleccionTrabajos\"\r\n      },\r\n      \"self\" : {\r\n        \"href\" : \"/api/v1/trabajo/1234\",\r\n        \"rel\" : \"creado iniciado planificado terminado\"\r\n      }\r\n    }\r\n  } ]\r\n}", InlineResponse200.class), HttpStatus.NOT_IMPLEMENTED);
-            } catch (IOException e) {
-                log.error("Couldn't serialize response for content type application/json", e);
-                return new ResponseEntity<InlineResponse200>(HttpStatus.INTERNAL_SERVER_ERROR);
+            ArrayList<Trabajo> trabajos = new ArrayList<>();
+            Trabajo.EstadoTrabajoEnum estadoTrabajoEnum = Trabajo.EstadoTrabajoEnum.fromValue(estadoTrabajo);
+            for (Trabajo trabajo : bdTrabajos.findByEstadoTrabajo(estadoTrabajoEnum)) {
+                trabajos.add(trabajo);
+            }
+            if (trabajos.isEmpty()){
+                return new ResponseEntity<ArrayList<Trabajo>>(HttpStatus.NOT_FOUND);
+            } else {
+                return new ResponseEntity<ArrayList<Trabajo>>(trabajos, HttpStatus.OK);
             }
         }
 
-        return new ResponseEntity<InlineResponse200>(HttpStatus.NOT_IMPLEMENTED);
+        return new ResponseEntity<ArrayList<Trabajo>>(HttpStatus.NOT_IMPLEMENTED);
     }
 
     public ResponseEntity<ArrayList<Trabajo>> grupo1AOSGetByVehiculo(@Parameter(in = ParameterIn.PATH, description = "Id del vehiculo", required = true, schema = @Schema()) @PathVariable("idVehiculo") Integer idVehiculo) {
