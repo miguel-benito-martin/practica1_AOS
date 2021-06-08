@@ -50,7 +50,7 @@ public interface TrabajoApi {
     @RequestMapping(value = "/trabajo/{trabajoId}",
             produces = {"application/problem+json"},
             method = RequestMethod.DELETE)
-    ResponseEntity<Void> grupo1AOSDelete(@Pattern(regexp = "^\\d+$") @Parameter(in = ParameterIn.PATH, description = "ID del trabajo", required = true, schema = @Schema()) @PathVariable("trabajoId") Integer trabajoId);
+    ResponseEntity<Void> grupo1AOSDelete(@Parameter(in = ParameterIn.PATH, description = "ID del trabajo", required = true, schema = @Schema()) @PathVariable("trabajoId") Integer trabajoId);
 
 
     @Operation(summary = "Obtiene todos los trabajos de mantenimiento que se realizan sobre un vehículo", description = "", tags = {"Trabajo"})
@@ -103,7 +103,7 @@ public interface TrabajoApi {
     @RequestMapping(value = "/trabajo/vehiculo/{idVehiculo}",
             produces = {"application/json", "application/problem+json"},
             method = RequestMethod.GET)
-    ResponseEntity<InlineResponse200> grupo1AOSGetByVehiculo(@Pattern(regexp = "^\\d+$") @Parameter(in = ParameterIn.PATH, description = "Id del vehiculo", required = true, schema = @Schema()) @PathVariable("idVehiculo") Integer idVehiculo);
+    ResponseEntity<InlineResponse200> grupo1AOSGetByVehiculo(@Parameter(in = ParameterIn.PATH, description = "Id del vehiculo", required = true, schema = @Schema()) @PathVariable("idVehiculo") Integer idVehiculo);
 
 
     @Operation(summary = "Buscar un trabajo por su ID", description = "Devuelve el trabajo especificado por `trabajoId`", tags = {"Trabajo"})
@@ -116,7 +116,7 @@ public interface TrabajoApi {
     @RequestMapping(value = "/trabajo/{trabajoId}",
             produces = {"application/json", "application/problem+json"},
             method = RequestMethod.GET)
-    ResponseEntity<Trabajo> grupo1AOSGetId(@Pattern(regexp = "^\\d+$") @Parameter(in = ParameterIn.PATH, description = "ID del trabajo", required = true, schema = @Schema()) @PathVariable("trabajoId") Integer trabajoId);
+    ResponseEntity<Trabajo> grupo1AOSGetId(@Parameter(in = ParameterIn.PATH, description = "ID del trabajo", required = true, schema = @Schema()) @PathVariable("trabajoId") Integer trabajoId);
 
 
     @Operation(summary = "Proporciona la lista de los métodos HTTP soportados", description = "Devuelve una cabecera `Allow` con la lista de métodos HTTP soportados (separados por comas).", tags = {"Trabajo"})
