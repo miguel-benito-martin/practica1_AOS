@@ -1,41 +1,24 @@
 package io.swagger.api;
 
-import io.swagger.model.HTTPProblems;
-import io.swagger.model.InlineResponse200;
 import io.swagger.model.Trabajo;
-import io.swagger.model.TrabajoBody;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.model.TrabajoBody;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.enums.ParameterIn;
-import io.swagger.v3.oas.annotations.responses.ApiResponses;
-import io.swagger.v3.oas.annotations.responses.ApiResponse;
-import io.swagger.v3.oas.annotations.media.ArraySchema;
-import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
-import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.bind.annotation.RestController;
-import org.springframework.web.bind.annotation.CookieValue;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestHeader;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RequestPart;
-import org.springframework.web.bind.annotation.RestController;
-import org.springframework.web.multipart.MultipartFile;
 
 import javax.validation.constraints.*;
 import javax.validation.Valid;
 import javax.servlet.http.HttpServletRequest;
-import java.io.IOException;
+import java.lang.reflect.Method;
 import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
 import java.util.Optional;
 
 @javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.SpringCodegen", date = "2021-06-05T16:35:07.675362500+02:00[Europe/Paris]")
@@ -67,11 +50,12 @@ public class TrabajoApiController implements TrabajoApi {
         }
     }
 
+
     public ResponseEntity<ArrayList<Trabajo>> grupo1AOSGet() {
         String accept = request.getHeader("Accept");
-        if (accept != null && accept.contains("application/json")) {
+        if (accept != null) {
             ArrayList<Trabajo> trabajos = (ArrayList<Trabajo>) bdTrabajos.findAll();
-            if(trabajos.isEmpty())
+            if (trabajos.isEmpty())
                 return new ResponseEntity<ArrayList<Trabajo>>(HttpStatus.NOT_FOUND);
             else
                 return new ResponseEntity<ArrayList<Trabajo>>(trabajos, HttpStatus.OK);
@@ -82,12 +66,12 @@ public class TrabajoApiController implements TrabajoApi {
 
     public ResponseEntity<ArrayList<Trabajo>> grupo1AOSGetByCliente(@Parameter(in = ParameterIn.PATH, description = "Id del cliente", required = true, schema = @Schema()) @PathVariable("idCliente") Integer idCliente) {
         String accept = request.getHeader("Accept");
-        if (accept != null && accept.contains("application/json")){
+        if (accept != null) {
             ArrayList<Trabajo> trabajos = new ArrayList<>();
             for (Trabajo trabajo : bdTrabajos.findByIdCliente(idCliente)) {
                 trabajos.add(trabajo);
             }
-            if(trabajos.isEmpty())
+            if (trabajos.isEmpty())
                 return new ResponseEntity<ArrayList<Trabajo>>(HttpStatus.NOT_FOUND);
             else
                 return new ResponseEntity<ArrayList<Trabajo>>(trabajos, HttpStatus.OK);
@@ -98,13 +82,13 @@ public class TrabajoApiController implements TrabajoApi {
     public ResponseEntity<ArrayList<Trabajo>> grupo1AOSGetByEstado(@NotNull @Parameter(in = ParameterIn.QUERY, description = "Elegir tipo de trabajo para su búsqueda", required = true, schema = @Schema(allowableValues = {"Creado", "Planificado", "Iniciado", "Terminado"}
             , defaultValue = "Creado")) @Valid @RequestParam(value = "estadoTrabajo", required = true, defaultValue = "Creado") String estadoTrabajo) {
         String accept = request.getHeader("Accept");
-        if (accept != null && accept.contains("application/json")) {
+        if (accept != null) {
             ArrayList<Trabajo> trabajos = new ArrayList<>();
             Trabajo.EstadoTrabajoEnum estadoTrabajoEnum = Trabajo.EstadoTrabajoEnum.fromValue(estadoTrabajo);
             for (Trabajo trabajo : bdTrabajos.findByEstadoTrabajo(estadoTrabajoEnum)) {
                 trabajos.add(trabajo);
             }
-            if (trabajos.isEmpty()){
+            if (trabajos.isEmpty()) {
                 return new ResponseEntity<ArrayList<Trabajo>>(HttpStatus.NOT_FOUND);
             } else {
                 return new ResponseEntity<ArrayList<Trabajo>>(trabajos, HttpStatus.OK);
@@ -116,12 +100,12 @@ public class TrabajoApiController implements TrabajoApi {
 
     public ResponseEntity<ArrayList<Trabajo>> grupo1AOSGetByVehiculo(@Parameter(in = ParameterIn.PATH, description = "Id del vehiculo", required = true, schema = @Schema()) @PathVariable("idVehiculo") Integer idVehiculo) {
         String accept = request.getHeader("Accept");
-        if (accept != null && accept.contains("application/json")){
+        if (accept != null) {
             ArrayList<Trabajo> trabajos = new ArrayList<>();
             for (Trabajo trabajo : bdTrabajos.findByIdVehiculo(idVehiculo)) {
                 trabajos.add(trabajo);
             }
-            if(trabajos.isEmpty())
+            if (trabajos.isEmpty())
                 return new ResponseEntity<ArrayList<Trabajo>>(HttpStatus.NOT_FOUND);
             else
                 return new ResponseEntity<ArrayList<Trabajo>>(trabajos, HttpStatus.OK);
@@ -131,7 +115,7 @@ public class TrabajoApiController implements TrabajoApi {
 
     public ResponseEntity<Trabajo> grupo1AOSGetId(@Parameter(in = ParameterIn.PATH, description = "ID del trabajo", required = true, schema = @Schema()) @PathVariable("trabajoId") Integer trabajoId) {
         String accept = request.getHeader("Accept");
-        if (accept != null && accept.contains("application/json")) {
+        if (accept != null) {
             Optional<Trabajo> trabajo = bdTrabajos.findById(trabajoId);
             if (trabajo.isPresent())
                 return new ResponseEntity<Trabajo>(trabajo.get(), HttpStatus.OK);
@@ -141,24 +125,39 @@ public class TrabajoApiController implements TrabajoApi {
         return new ResponseEntity<Trabajo>(HttpStatus.NOT_IMPLEMENTED);
     }
 
-    public ResponseEntity<Void> grupo1AOSOptions() {
+    public ResponseEntity<ArrayList<String>> grupo1AOSOptions() {
         String accept = request.getHeader("Accept");
-        return new ResponseEntity<Void>(HttpStatus.NOT_IMPLEMENTED);
+        Class clase = TrabajoApiController.class;
+        Method[] aux = clase.getDeclaredMethods();
+        ArrayList<String> options = new ArrayList<>();
+        for (Method m : aux) {
+            options.add(m.getName());
+        }
+        return new ResponseEntity<ArrayList<String>>(options, HttpStatus.OK);
     }
 
     public ResponseEntity<Trabajo> grupo1AOSPost(@Parameter(in = ParameterIn.DEFAULT, description = "", required = true, schema = @Schema()) @Valid @RequestBody Trabajo body) {
         String accept = request.getHeader("Accept");
-        if (accept != null && accept.contains("application/json")){
-            bdTrabajos.save(body);
-            return new ResponseEntity<Trabajo>(HttpStatus.CREATED);
+        if (accept != null && accept.contains("application/json")) {
+            if (comprobarIdPOST(body)) {
+                bdTrabajos.save(body);
+                return new ResponseEntity<Trabajo>(HttpStatus.CREATED);
+            }
+            else return new ResponseEntity<Trabajo>(HttpStatus.CONFLICT);
         }
-        return new ResponseEntity<Trabajo>(HttpStatus.NOT_IMPLEMENTED);
+        return new ResponseEntity<Trabajo>(HttpStatus.BAD_REQUEST);
     }
 
-    public ResponseEntity<Trabajo> grupo1AOSPut(@Parameter(in = ParameterIn.HEADER, description = "ETag del recurso que se desea modificar", required = true, schema = @Schema()) @RequestHeader(value = "If-Match", required = true) String ifMatch, @Parameter(in = ParameterIn.PATH, description = "ID del trabajo", required = true, schema = @Schema()) @PathVariable("trabajoId") Integer trabajoId, @Parameter(in = ParameterIn.DEFAULT, description = "`Trabajo` data", required = true, schema = @Schema()) @Valid @RequestBody Trabajo body) {
+    private boolean comprobarIdPOST(Trabajo t) {
+        return bdTrabajos.existsById(t.getTrabajoId());
+    }
+
+    public ResponseEntity<Trabajo> grupo1AOSPut(@Parameter(in = ParameterIn.HEADER, description = "ETag del recurso que se desea modificar", required = true, schema = @Schema())
+                                                @RequestHeader(value = "If-Match", required = true) String ifMatch, @Parameter(in = ParameterIn.PATH, description = "ID del trabajo", required = true, schema = @Schema())
+                                                @PathVariable("trabajoId") Integer trabajoId, @Parameter(in = ParameterIn.DEFAULT, description = "`Trabajo` data", required = true, schema = @Schema()) @Valid @RequestBody Trabajo body) {
         String accept = request.getHeader("Accept");
         Optional<Trabajo> trabajo = bdTrabajos.findById(trabajoId);
-        if (trabajo.isPresent()) {
+        if (trabajo.isPresent() && accept.contains("application/json")) {
             Trabajo t = trabajo.get();
             t.setNombre(body.getNombre());
             t.setEstadoTrabajo(body.getEstadoTrabajo());
