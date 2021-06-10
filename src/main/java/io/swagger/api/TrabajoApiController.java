@@ -155,18 +155,23 @@ public class TrabajoApiController implements TrabajoApi {
         return new ResponseEntity<Trabajo>(HttpStatus.NOT_IMPLEMENTED);
     }
 
-    public ResponseEntity<Trabajo> grupo1AOSPut(@Parameter(in = ParameterIn.HEADER, description = "ETag del recurso que se desea modificar", required = true, schema = @Schema()) @RequestHeader(value = "If-Match", required = true) String ifMatch, @Pattern(regexp = "^\\d+$") @Parameter(in = ParameterIn.PATH, description = "ID del trabajo", required = true, schema = @Schema()) @PathVariable("trabajoId") Integer trabajoId, @Parameter(in = ParameterIn.DEFAULT, description = "`Trabajo` data", required = true, schema = @Schema()) @Valid @RequestBody Object body) {
+    public ResponseEntity<Trabajo> grupo1AOSPut(@Parameter(in = ParameterIn.HEADER, description = "ETag del recurso que se desea modificar", required = true, schema = @Schema()) @RequestHeader(value = "If-Match", required = true) String ifMatch, @Parameter(in = ParameterIn.PATH, description = "ID del trabajo", required = true, schema = @Schema()) @PathVariable("trabajoId") Integer trabajoId, @Parameter(in = ParameterIn.DEFAULT, description = "`Trabajo` data", required = true, schema = @Schema()) @Valid @RequestBody Trabajo body) {
         String accept = request.getHeader("Accept");
-        if (accept != null && accept.contains("application/json")) {
-            try {
-                return new ResponseEntity<Trabajo>(objectMapper.readValue("{\r\n  \"trabajoId\" : 1234,\r\n  \"idVehiculo\" : 98765,\r\n  \"idCliente\" : 14,\r\n  \"nombre\" : \"Cambio de agua\",\r\n  \"descripcion\" : \"Cambio de agua cada 500km\",\r\n  \"estadoTrabajo\" : \"Iniciado\",\r\n  \"fechaInicio\" : \"2021-01-30T08:30:00Z\",\r\n  \"links\" : {\r\n    \"trabajos\" : {\r\n      \"href\" : \"/api/v1/trabajo\",\r\n      \"rel\" : \"coleccionTrabajos\"\r\n    },\r\n    \"self\" : {\r\n      \"href\" : \"/api/v1/trabajo/1234\",\r\n      \"rel\" : \"creado iniciado planificado terminado\"\r\n    }\r\n  }\r\n}", Trabajo.class), HttpStatus.NOT_IMPLEMENTED);
-            } catch (IOException e) {
-                log.error("Couldn't serialize response for content type application/json", e);
-                return new ResponseEntity<Trabajo>(HttpStatus.INTERNAL_SERVER_ERROR);
-            }
+        Optional<Trabajo> trabajo = bdTrabajos.findById(trabajoId);
+        if (trabajo.isPresent()) {
+            Trabajo t = trabajo.get();
+            t.setNombre(body.getNombre());
+            t.setEstadoTrabajo(body.getEstadoTrabajo());
+            t.setDescripcion(body.getDescripcion());
+            t.setFechaInicio(body.getFechaInicio());
+            t.setFechaFin(body.getFechaFin());
+            t.setIdCliente(body.getIdCliente());
+            t.setIdVehiculo(body.getIdVehiculo());
+            bdTrabajos.save(t);
+            return new ResponseEntity<Trabajo>(HttpStatus.OK);
+        } else {
+            return new ResponseEntity<Trabajo>(HttpStatus.NOT_FOUND);
         }
-
-        return new ResponseEntity<Trabajo>(HttpStatus.NOT_IMPLEMENTED);
     }
 
 }

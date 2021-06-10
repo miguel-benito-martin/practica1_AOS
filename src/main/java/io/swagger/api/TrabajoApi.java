@@ -163,7 +163,7 @@ public interface TrabajoApi {
             produces = {"application/json", "application/problem+json"},
             consumes = {"application/json"},
             method = RequestMethod.PUT)
-    ResponseEntity<Trabajo> grupo1AOSPut(@Parameter(in = ParameterIn.HEADER, description = "ETag del recurso que se desea modificar", required = true, schema = @Schema()) @RequestHeader(value = "If-Match", required = true) String ifMatch, @Pattern(regexp = "^\\d+$") @Parameter(in = ParameterIn.PATH, description = "ID del trabajo", required = true, schema = @Schema()) @PathVariable("trabajoId") Integer trabajoId, @Parameter(in = ParameterIn.DEFAULT, description = "`Trabajo` data", required = true, schema = @Schema()) @Valid @RequestBody Object body);
+    ResponseEntity<Trabajo> grupo1AOSPut(@Parameter(in = ParameterIn.HEADER, description = "ETag del recurso que se desea modificar", required = true, schema = @Schema()) @RequestHeader(value = "If-Match", required = true) String ifMatch, @Parameter(in = ParameterIn.PATH, description = "ID del trabajo", required = true, schema = @Schema()) @PathVariable("trabajoId") Integer trabajoId, @Parameter(in = ParameterIn.DEFAULT, description = "`Trabajo` data", required = true, schema = @Schema()) @Valid @RequestBody Trabajo body);
 
 }
 
