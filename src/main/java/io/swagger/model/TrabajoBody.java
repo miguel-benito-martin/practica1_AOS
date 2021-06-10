@@ -4,31 +4,146 @@ import java.util.Objects;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonCreator;
+import com.fasterxml.jackson.annotation.JsonValue;
+import io.swagger.model.TrabajoLinks;
 import io.swagger.v3.oas.annotations.media.Schema;
+import org.springframework.data.annotation.Id;
+import org.springframework.data.mongodb.core.mapping.Document;
+import org.threeten.bp.OffsetDateTime;
 import org.springframework.validation.annotation.Validated;
 
 import javax.validation.Valid;
 import javax.validation.constraints.*;
 
 /**
- * TrabajoBody
+ * Añadir descripción
  */
+@Schema(description = "Añadir descripción")
 @Validated
 @javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.SpringCodegen", date = "2021-06-05T16:35:07.675362500+02:00[Europe/Paris]")
 
-
+@Document(collection = "demo")
 public class TrabajoBody {
-    @JsonProperty("nombre")
-    private String nombre = null;
-
-    @JsonProperty("descripcion")
-    private String descripcion = null;
+    @JsonProperty("trabajoId")
+    @Id
+    private Integer trabajoId = null;
 
     @JsonProperty("idVehiculo")
     private Integer idVehiculo = null;
 
     @JsonProperty("idCliente")
     private Integer idCliente = null;
+
+    @JsonProperty("nombre")
+    private String nombre = null;
+
+    @JsonProperty("descripcion")
+    private String descripcion = null;
+
+    /**
+     * Posibles estados del trabajo [Creado, Planificado, Iniciado, Terminado]
+     */
+    public enum EstadoTrabajoEnum {
+        CREADO("Creado"),
+
+        PLANIFICADO("Planificado"),
+
+        INICIADO("Iniciado"),
+
+        TERMINADO("Terminado");
+
+        private String value;
+
+        EstadoTrabajoEnum(String value) {
+            this.value = value;
+        }
+
+        @Override
+        @JsonValue
+        public String toString() {
+            return String.valueOf(value);
+        }
+
+        @JsonCreator
+        public static EstadoTrabajoEnum fromValue(String text) {
+            for (EstadoTrabajoEnum b : EstadoTrabajoEnum.values()) {
+                if (String.valueOf(b.value).equals(text)) {
+                    return b;
+                }
+            }
+            return null;
+        }
+    }
+
+    @JsonProperty("estadoTrabajo")
+    private EstadoTrabajoEnum estadoTrabajo = null;
+
+    @JsonProperty("fechaInicio")
+    private OffsetDateTime fechaInicio = null;
+
+    @JsonProperty("fechaFin")
+    private OffsetDateTime fechaFin = null;
+
+
+    public TrabajoBody trabajoId(Integer trabajoId) {
+        this.trabajoId = trabajoId;
+        return this;
+    }
+
+    /**
+     * Identicador del trabajo
+     *
+     * @return trabajoId
+     **/
+    @Schema(accessMode = Schema.AccessMode.READ_ONLY, description = "Identicador del trabajo")
+
+    public Integer getTrabajoId() {
+        return trabajoId;
+    }
+
+    public void setTrabajoId(Integer trabajoId) {
+        this.trabajoId = trabajoId;
+    }
+
+    public TrabajoBody idVehiculo(Integer idVehiculo) {
+        this.idVehiculo = idVehiculo;
+        return this;
+    }
+
+    /**
+     * ID del vehículo sobre el que se reliza el trabajo
+     *
+     * @return idVehiculo
+     **/
+    @Schema(accessMode = Schema.AccessMode.READ_ONLY, description = "ID del vehículo sobre el que se reliza el trabajo")
+
+    public Integer getIdVehiculo() {
+        return idVehiculo;
+    }
+
+    public void setIdVehiculo(Integer idVehiculo) {
+        this.idVehiculo = idVehiculo;
+    }
+
+    public TrabajoBody idCliente(Integer idCliente) {
+        this.idCliente = idCliente;
+        return this;
+    }
+
+    /**
+     * ID del cliente propietario del vehículo
+     *
+     * @return idCliente
+     **/
+    @Schema(accessMode = Schema.AccessMode.READ_ONLY, description = "ID del cliente propietario del vehículo")
+
+    public Integer getIdCliente() {
+        return idCliente;
+    }
+
+    public void setIdCliente(Integer idCliente) {
+        this.idCliente = idCliente;
+    }
 
     public TrabajoBody nombre(String nombre) {
         this.nombre = nombre;
@@ -40,8 +155,7 @@ public class TrabajoBody {
      *
      * @return nombre
      **/
-    @Schema(required = true, description = "Nombre del tipo de trabajo")
-    @NotNull
+    @Schema(description = "Nombre del tipo de trabajo")
 
     public String getNombre() {
         return nombre;
@@ -61,8 +175,7 @@ public class TrabajoBody {
      *
      * @return descripcion
      **/
-    @Schema(required = true, description = "Descripción del trabajo")
-    @NotNull
+    @Schema(description = "Descripción del trabajo")
 
     public String getDescripcion() {
         return descripcion;
@@ -72,46 +185,66 @@ public class TrabajoBody {
         this.descripcion = descripcion;
     }
 
-    public TrabajoBody idVehiculo(Integer idVehiculo) {
-        this.idVehiculo = idVehiculo;
+    public TrabajoBody estadoTrabajo(EstadoTrabajoEnum estadoTrabajo) {
+        this.estadoTrabajo = estadoTrabajo;
         return this;
     }
 
     /**
-     * Identificador del vehículo
+     * Posibles estados del trabajo [Creado, Planificado, Iniciado, Terminado]
      *
-     * @return idVehiculo
+     * @return estadoTrabajo
      **/
-    @Schema(required = true, description = "Identificador del vehículo")
-    @NotNull
+    @Schema(description = "Posibles estados del trabajo [Creado, Planificado, Iniciado, Terminado]")
 
-    public Integer getIdVehiculo() {
-        return idVehiculo;
+    public EstadoTrabajoEnum getEstadoTrabajo() {
+        return estadoTrabajo;
     }
 
-    public void setIdVehiculo(Integer idVehiculo) {
-        this.idVehiculo = idVehiculo;
+    public void setEstadoTrabajo(EstadoTrabajoEnum estadoTrabajo) {
+        this.estadoTrabajo = estadoTrabajo;
     }
 
-    public TrabajoBody idCliente(Integer idCliente) {
-        this.idCliente = idCliente;
+    public TrabajoBody fechaInicio(OffsetDateTime fechaInicio) {
+        this.fechaInicio = fechaInicio;
         return this;
     }
 
     /**
-     * Identificador del cliente
+     * Fecha en la que se inicializa el trabajo
      *
-     * @return idCliente
+     * @return fechaInicio
      **/
-    @Schema(required = true, description = "Identificador del cliente")
-    @NotNull
+    @Schema(description = "Fecha en la que se inicializa el trabajo")
 
-    public Integer getIdCliente() {
-        return idCliente;
+    @Valid
+    public OffsetDateTime getFechaInicio() {
+        return fechaInicio;
     }
 
-    public void setIdCliente(Integer idCliente) {
-        this.idCliente = idCliente;
+    public void setFechaInicio(OffsetDateTime fechaInicio) {
+        this.fechaInicio = fechaInicio;
+    }
+
+    public TrabajoBody fechaFin(OffsetDateTime fechaFin) {
+        this.fechaFin = fechaFin;
+        return this;
+    }
+
+    /**
+     * Fecha en la que se finaliza el trabajo
+     *
+     * @return fechaFin
+     **/
+    @Schema(description = "Fecha en la que se finaliza el trabajo")
+
+    @Valid
+    public OffsetDateTime getFechaFin() {
+        return fechaFin;
+    }
+
+    public void setFechaFin(OffsetDateTime fechaFin) {
+        this.fechaFin = fechaFin;
     }
 
 
@@ -123,27 +256,35 @@ public class TrabajoBody {
         if (o == null || getClass() != o.getClass()) {
             return false;
         }
-        TrabajoBody trabajoBody = (TrabajoBody) o;
-        return Objects.equals(this.nombre, trabajoBody.nombre) &&
-                Objects.equals(this.descripcion, trabajoBody.descripcion) &&
-                Objects.equals(this.idVehiculo, trabajoBody.idVehiculo) &&
-                Objects.equals(this.idCliente, trabajoBody.idCliente);
+        TrabajoBody trabajo = (TrabajoBody) o;
+        return Objects.equals(this.trabajoId, trabajo.trabajoId) &&
+                Objects.equals(this.idVehiculo, trabajo.idVehiculo) &&
+                Objects.equals(this.idCliente, trabajo.idCliente) &&
+                Objects.equals(this.nombre, trabajo.nombre) &&
+                Objects.equals(this.descripcion, trabajo.descripcion) &&
+                Objects.equals(this.estadoTrabajo, trabajo.estadoTrabajo) &&
+                Objects.equals(this.fechaInicio, trabajo.fechaInicio) &&
+                Objects.equals(this.fechaFin, trabajo.fechaFin);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(nombre, descripcion, idVehiculo, idCliente);
+        return Objects.hash(trabajoId, idVehiculo, idCliente, nombre, descripcion, estadoTrabajo, fechaInicio, fechaFin);
     }
 
     @Override
     public String toString() {
         StringBuilder sb = new StringBuilder();
-        sb.append("class TrabajoBody {\n");
+        sb.append("class Trabajo {\n");
 
-        sb.append("    nombre: ").append(toIndentedString(nombre)).append("\n");
-        sb.append("    descripcion: ").append(toIndentedString(descripcion)).append("\n");
+        sb.append("    trabajoId: ").append(toIndentedString(trabajoId)).append("\n");
         sb.append("    idVehiculo: ").append(toIndentedString(idVehiculo)).append("\n");
         sb.append("    idCliente: ").append(toIndentedString(idCliente)).append("\n");
+        sb.append("    nombre: ").append(toIndentedString(nombre)).append("\n");
+        sb.append("    descripcion: ").append(toIndentedString(descripcion)).append("\n");
+        sb.append("    estadoTrabajo: ").append(toIndentedString(estadoTrabajo)).append("\n");
+        sb.append("    fechaInicio: ").append(toIndentedString(fechaInicio)).append("\n");
+        sb.append("    fechaFin: ").append(toIndentedString(fechaFin)).append("\n");
         sb.append("}");
         return sb.toString();
     }

@@ -28,6 +28,11 @@ public class Link   {
     return this;
   }
 
+  public Link(String href, String rel) {
+    this.href = href;
+    this.rel = rel;
+  }
+
   /**
    * URL del enlace
    * @return href

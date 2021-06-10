@@ -1,8 +1,10 @@
 package io.swagger.api;
 
+import io.swagger.model.Link;
 import io.swagger.model.Trabajo;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import io.swagger.model.TrabajoBody;
+import io.swagger.model.TrabajoLinks;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.enums.ParameterIn;
 import io.swagger.v3.oas.annotations.media.Schema;
@@ -136,25 +138,35 @@ public class TrabajoApiController implements TrabajoApi {
         return new ResponseEntity<ArrayList<String>>(options, HttpStatus.OK);
     }
 
-    public ResponseEntity<Trabajo> grupo1AOSPost(@Parameter(in = ParameterIn.DEFAULT, description = "", required = true, schema = @Schema()) @Valid @RequestBody Trabajo body) {
+    public ResponseEntity<Trabajo> grupo1AOSPost(@Parameter(in = ParameterIn.DEFAULT, description = "", required = true, schema = @Schema()) @Valid @RequestBody TrabajoBody body) {
         String accept = request.getHeader("Accept");
         if (accept != null && accept.contains("application/json")) {
-            if (comprobarIdPOST(body)) {
-                bdTrabajos.save(body);
-                return new ResponseEntity<Trabajo>(HttpStatus.CREATED);
-            }
-            else return new ResponseEntity<Trabajo>(HttpStatus.CONFLICT);
+            if (!comprobarIdPOST(body)) {
+                Trabajo nuevoTrabajo = new Trabajo();
+                nuevoTrabajo.setTrabajoId(body.getTrabajoId());
+                nuevoTrabajo.setNombre(body.getNombre());
+                nuevoTrabajo.setEstadoTrabajo(body.getEstadoTrabajo());
+                nuevoTrabajo.setDescripcion(body.getDescripcion());
+                nuevoTrabajo.setFechaInicio(body.getFechaInicio());
+                nuevoTrabajo.setFechaFin(body.getFechaFin());
+                nuevoTrabajo.setIdCliente(body.getIdCliente());
+                nuevoTrabajo.setIdVehiculo(body.getIdVehiculo());
+                nuevoTrabajo.setLinks(new TrabajoLinks(new Link("http://localhost:8080/api/v1/trabajo", "Lista de todos los trabajos registrados"),
+                        new Link("http://localhost:8080/api/v1/swagger-ui/#/Trabajo/grupo1AOSPutUsingPUT", "Modificar este trabajo")));
+                bdTrabajos.save(nuevoTrabajo);
+                return new ResponseEntity<Trabajo>(nuevoTrabajo, HttpStatus.CREATED);
+            } else return new ResponseEntity<Trabajo>(HttpStatus.CONFLICT);
         }
         return new ResponseEntity<Trabajo>(HttpStatus.BAD_REQUEST);
     }
 
-    private boolean comprobarIdPOST(Trabajo t) {
+    private boolean comprobarIdPOST(TrabajoBody t) {
         return bdTrabajos.existsById(t.getTrabajoId());
     }
 
     public ResponseEntity<Trabajo> grupo1AOSPut(@Parameter(in = ParameterIn.HEADER, description = "ETag del recurso que se desea modificar", required = true, schema = @Schema())
                                                 @RequestHeader(value = "If-Match", required = true) String ifMatch, @Parameter(in = ParameterIn.PATH, description = "ID del trabajo", required = true, schema = @Schema())
-                                                @PathVariable("trabajoId") Integer trabajoId, @Parameter(in = ParameterIn.DEFAULT, description = "`Trabajo` data", required = true, schema = @Schema()) @Valid @RequestBody Trabajo body) {
+                                                @PathVariable("trabajoId") Integer trabajoId, @Parameter(in = ParameterIn.DEFAULT, description = "`Trabajo` data", required = true, schema = @Schema()) @Valid @RequestBody TrabajoBody body) {
         String accept = request.getHeader("Accept");
         Optional<Trabajo> trabajo = bdTrabajos.findById(trabajoId);
         if (trabajo.isPresent() && accept.contains("application/json")) {
@@ -166,6 +178,8 @@ public class TrabajoApiController implements TrabajoApi {
             t.setFechaFin(body.getFechaFin());
             t.setIdCliente(body.getIdCliente());
             t.setIdVehiculo(body.getIdVehiculo());
+            t.setLinks(new TrabajoLinks(new Link("http://localhost:8080/api/v1/trabajo", "Lista de todos los trabajos registrados"),
+                    new Link("http://localhost:8080/api/v1/swagger-ui/#/Trabajo/grupo1AOSPutUsingPUT", "Modificar este trabajo")));
             bdTrabajos.save(t);
             return new ResponseEntity<Trabajo>(HttpStatus.OK);
         } else {

@@ -8,6 +8,7 @@ package io.swagger.api;
 import io.swagger.model.HTTPProblems;
 import io.swagger.model.InlineResponse200;
 import io.swagger.model.Trabajo;
+import io.swagger.model.TrabajoBody;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.enums.ParameterIn;
@@ -137,7 +138,7 @@ public interface TrabajoApi {
             produces = {"application/json", "application/problem+json"},
             consumes = {"application/json"},
             method = RequestMethod.POST)
-    ResponseEntity<Trabajo> grupo1AOSPost(@Parameter(in = ParameterIn.DEFAULT, description = "", required = true, schema = @Schema()) @Valid @RequestBody Trabajo body);
+    ResponseEntity<Trabajo> grupo1AOSPost(@Parameter(in = ParameterIn.DEFAULT, description = "", required = true, schema = @Schema()) @Valid @RequestBody TrabajoBody body);
 
 
     @Operation(summary = "Modifica un trabajo", description = "Actualiza los datos de un trabajo por un trabajoId", tags = {"Trabajo"})
@@ -155,7 +156,9 @@ public interface TrabajoApi {
             produces = {"application/json", "application/problem+json"},
             consumes = {"application/json"},
             method = RequestMethod.PUT)
-    ResponseEntity<Trabajo> grupo1AOSPut(@Parameter(in = ParameterIn.HEADER, description = "ETag del recurso que se desea modificar", required = true, schema = @Schema()) @RequestHeader(value = "If-Match", required = true) String ifMatch, @Parameter(in = ParameterIn.PATH, description = "ID del trabajo", required = true, schema = @Schema()) @PathVariable("trabajoId") Integer trabajoId, @Parameter(in = ParameterIn.DEFAULT, description = "`Trabajo` data", required = true, schema = @Schema()) @Valid @RequestBody Trabajo body);
+    ResponseEntity<Trabajo> grupo1AOSPut(@Parameter(in = ParameterIn.HEADER, description = "ETag del recurso que se desea modificar", required = true, schema = @Schema())
+                                         @RequestHeader(value = "If-Match", required = true) String ifMatch, @Parameter(in = ParameterIn.PATH, description = "ID del trabajo", required = true, schema = @Schema())
+                                         @PathVariable("trabajoId") Integer trabajoId, @Parameter(in = ParameterIn.DEFAULT, description = "`Trabajo` data", required = true, schema = @Schema()) @Valid @RequestBody TrabajoBody body);
 
 }
 

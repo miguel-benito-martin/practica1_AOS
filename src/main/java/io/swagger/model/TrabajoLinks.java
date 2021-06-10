@@ -29,6 +29,11 @@ public class TrabajoLinks   {
     return this;
   }
 
+  public TrabajoLinks(Link trabajos, Link self) {
+    this.trabajos = trabajos;
+    this.self = self;
+  }
+
   /**
    * Get trabajos
    * @return trabajos
