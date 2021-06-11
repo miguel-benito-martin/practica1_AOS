@@ -25,10 +25,10 @@ hs_err_pid*
 ##
 .gradle
 .swagger-codegen-ignore
-classes/
-/build
+/classes/
+/build/
 /spring-*/build
-target/
+
 
 # Eclipse artifacts, including WTP generated manifests
 .classpath
@@ -40,5 +40,6 @@ spring-*/src/main/java/META-INF/MANIFEST.MF
 *.ipr
 *.iws
 .idea
-out
+/out/
 
+/target/
