@@ -1,18 +1,18 @@
-ARG BUILD_IMAGE=maven:3.6.0-jdk-8
-ARG RUNTIME_IMAGE=ubuntu:18.04
+ARG COMPILACION=maven:3.6.0-jdk-8
+ARG EJECUCION=ubuntu:18.04
 
 #Dependencias de Maven
-FROM ${BUILD_IMAGE} as dependencies
+FROM ${COMPILACION} as dependencies
 COPY pom.xml ./
 RUN mvn dependency:go-offline
 
 #Compilar con Maven
 FROM dependencies as build
 COPY src ./src
-RUN mvn clean package -Pjar
+RUN mvn clean package -Pjar 
 
 #OpenJDK
-FROM ${RUNTIME_IMAGE}
+FROM ${EJECUCION}
 RUN apt-get update && \
     apt-get install -y openjdk-8-jdk && \
     apt-get install -y ant && \
@@ -24,7 +24,7 @@ RUN apt-get update && \
 ENV JAVA_HOME /usr/lib/jvm/java-8-openjdk-amd64/
 RUN export JAVA_HOME
 #Copiar el artefacto a nueva carpeta
-COPY  target/servicio-3-0.0.1-SNAPSHOT.jar /home/app.jar
+COPY --from=build target/servicio-3-0.0.1-SNAPSHOT.jar /home/app.jar
 #Mongo
 RUN apt-get install -y mongodb
 RUN cd / && mkdir data && cd /data && mkdir db
