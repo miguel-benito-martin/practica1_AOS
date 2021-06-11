@@ -24,7 +24,7 @@ RUN apt-get update && \
 ENV JAVA_HOME /usr/lib/jvm/java-8-openjdk-amd64/
 RUN export JAVA_HOME
 #Copiar el artefacto a nueva carpeta
-COPY  target/*.jar /home/app.jar
+COPY  target/servicio-3-0.0.1-SNAPSHOT.jar /home/app.jar
 #Mongo
 RUN apt-get install -y mongodb
 RUN cd / && mkdir data && cd /data && mkdir db
