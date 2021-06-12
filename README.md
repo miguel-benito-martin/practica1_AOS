@@ -7,7 +7,8 @@ Manual provisional:
 La imagen compilada tiene una base en Ubuntu e incluye la aplicación(con la implementación en Spring) y la BD en mongodb.
 Por tanto, no es necesario el uso de un docker-compose para desplegar este sevicio. Simplemente es necesario bajarse la imagen y crear el contenedor.
 
-Ejemplo: `docker run --name trabajosAPI -p 8080:8080 migue9b/trabajos:latest`
+Ejemplo: `docker run --name trabajosAPI -p 8080:8080 migue9b/trabajos:latest`  
+Acceder a `http://localhost:8080/api/v1` tras arrancar el contenedor.
 
 # Arquitectura Orientada a Servicios 2021
 
