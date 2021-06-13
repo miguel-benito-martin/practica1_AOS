@@ -1,0 +1,99 @@
+version: "3"
+
+services:
+
+    clientes_1:
+        image: zcj583/ss1-onlyflask
+        ports:
+            - "8080:8080"
+        networks:
+            - taller_api
+        depends_on:
+            - mongodb
+
+    mongodb:
+        image: mongo
+        restart: always
+        networks:
+            - taller_api
+        environment:
+            MONGO_INITDB_DATABASE: ss1
+        ports:
+            - 27017:27017
+        volumes:
+            - db_data:/var/lib/mongo
+
+    vehiculos_2:
+        image: asdiaz/aos_subsistema2:2.4
+        container_name: api_vehiculos
+        ports:
+            - 8081:8080
+        networks:
+            - taller_api
+        links:
+            - mysql
+
+    mysql:
+        image: asdiaz/aos_bd:1.2
+        container_name: vehiculos_persistencia
+        environment:
+            MYSQL_DATABASE: practica_aos
+            MYSQL_ROOT_PASSWORD: 1234
+        ports:
+            - "3306:3306"
+        networks:
+            - taller_api
+
+    trabajos_3:
+        image: migue9b/trabajos:latest
+        container_name: api_trabajos
+        ports:
+            - 8082:8080
+        networks:
+            - taller_api
+
+    notificaciones_4:
+        image: jvidalc/aos_subsistema4_notificaciones
+        container_name: api_notificaciones
+        ports:
+            - 8083:8080
+        networks:
+            - taller_api
+        links:
+            - notificaciones_4-mysql
+
+    notificaciones_4-mysql:
+        image: mysql:8
+        container_name: notificaciones_persistencia
+        networks:
+            - taller_api
+        environment:
+            - MYSQL_ROOT_PASSWORD=qwerty
+            - MYSQL_DATABASE=aos4
+            - MYSQL_USER=qwerty
+            - MYSQL_PASSWORD=qwerty
+        volumes:
+            - db_data:/var/lib/mysql
+            - ./dbdump:/docker-entrypoint-initdb.d
+
+    facturas_5:
+        image: rugana90/aos-ss5:0.5
+        container_name: api_facturas
+        ports:
+            - 8084:8080
+        networks:
+            - taller_api
+
+    recambios_6:
+        image: clatange/aos:latest
+        container_name: api_recambios
+        ports:
+            - 8085:8080
+        networks:
+            - taller_api
+
+networks:
+    taller_api:
+
+volumes:
+    db_data:
