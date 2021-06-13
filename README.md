@@ -8,7 +8,9 @@ La imagen compilada tiene una base en Ubuntu e incluye la aplicación(con la imp
 Por tanto, no es necesario el uso de un docker-compose para desplegar este sevicio. Simplemente es necesario bajarse la imagen y crear el contenedor.
 
 Ejemplo: `docker run --name trabajosAPI -p 8080:8080 migue9b/trabajos:latest`  
-Acceder a `http://localhost:8080/api/v1` tras arrancar el contenedor.
+Acceder a `http://localhost:8080/api/v1` tras arrancar el contenedor.  
+
+⬇⬇ PENDIENTE DE ACTUALIZAR ⬇⬇ **No consultar. De aquí para abajo pertenece a la especificacion de la API de la práctica 1.**
 
 # Arquitectura Orientada a Servicios 2021
 
